@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     {
         currentYear = startYear;
         deltaYearTime = totalDuration/Mathf.Abs(endYear-startYear);
+        Debug.Log(deltaYearTime);
     }
 
     
