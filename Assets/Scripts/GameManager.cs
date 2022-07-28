@@ -10,13 +10,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float totalDuration; //time in seconds
 
     //getters & setters
-    public int CurrentYear{get=>currentYear;}
+    public int CurrentYear{get=>currentYear;private set=>currentYear=value;}
 
     void Start()
     {
         currentYear = startYear;
         deltaYearTime = totalDuration/Mathf.Abs(endYear-startYear);
-        Debug.Log(deltaYearTime);
     }
 
     
@@ -24,7 +23,7 @@ public class GameManager : MonoBehaviour
     {
         if (currentTime >= deltaYearTime) {
             currentTime = 0;
-            currentYear++;
+            CurrentYear = Mathf.Min(CurrentYear+1, endYear);
         }
         else
             currentTime += Time.deltaTime;
