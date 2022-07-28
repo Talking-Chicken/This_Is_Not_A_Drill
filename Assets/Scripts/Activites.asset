@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fd82349592a0a2479919f945279fdd5, type: 3}
+  m_Name: Activites
+  m_EditorClassIdentifier: 
+  Activities:
+  - activityName: Fuck it
+    startYear: 2022
+    lastEndYear: 2030
+    duration: 5
+    classType: 0
