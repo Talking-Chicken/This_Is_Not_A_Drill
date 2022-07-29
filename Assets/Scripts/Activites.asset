@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Activities:
   - activityName: Fuck it
-    startYear: 2022
-    lastEndYear: 2030
-    duration: 5
+    startYears: 
+    endYears: 
     classType: 0
