@@ -11,21 +11,48 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float totalDuration; //time in seconds
     private List<HumanActivity> activatingActivities = new List<HumanActivity>(), DeactivatingActivities = new List<HumanActivity>();
 
-    [SerializeField] private ActivityData data;
+    //cards
+    [SerializeField] private ActivityData activities;
     [SerializeField] private TextAsset cardFile;
+    [SerializeField] private List<HumanActivity> activeCards;
+
+    //roles
+    private List<ActivityRole> roles = new List<ActivityRole>() {
+        new ActivityRole("Working Class"), new ActivityRole("Middle Class"), new ActivityRole("Upper Class"),
+        new ActivityRole("Company"), new ActivityRole("Policymaker")
+    };
+
     private UIControl uiControl;
 
     //getters & setters
     public int CurrentYear{get=>currentYear;private set=>currentYear=value;}
+    public List<HumanActivity> ActiveCards{get=>activeCards;private set=>activeCards=value;}
+    public List<ActivityRole> Roles{get=>roles;private set=>roles=value;}
 
     void Start()
     {
         currentYear = startYear;
         deltaYearTime = totalDuration/Mathf.Abs(endYear-startYear);
-        ParseCSV(cardFile.text);
+        List<List<string>> cards = ParseCSVIntoCards(cardFile.text);
+        assignCardsToActivities(cards);
         uiControl = FindObjectOfType<UIControl>();
 
         StartCoroutine(timeCountDown(deltaYearTime));
+
+        //test
+        addToActiveCards("ban ads");
+        addToActiveCards("electric car");
+        addToActiveCards("riot");
+        addToActiveCards("building");
+        addToActiveCards("nuclear");
+        
+        foreach (ActivityRole role in Roles)
+            role.IsInGame = true;
+        
+        roundEnd();
+        // for (int i = 0; i < activeCards.Count; i++) {
+        //     Debug.Log(i + " is " + checkCondition(activeCards[i].FirstConditions[1], activeCards[i].ActivityClass));
+        // }
     }
 
     
@@ -38,13 +65,13 @@ public class GameManager : MonoBehaviour
         //     currentTime += Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Q))
-            data.Activities[0].StartYears.Add(1);
+            activities.Activities[0].StartYears.Add(1);
     }
 
     public void nextYear() {
         currentTime = 0;
         CurrentYear = Mathf.Min(CurrentYear+1, endYear);
-        uiControl.randomChangeText();
+        //uiControl.randomChangeText();
     }
 
     IEnumerator timeCountDown(float waitSecond) {
@@ -56,27 +83,374 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private string[][] ParseCSV(string fileString)
+    #region CSV to Scriptable Object
+    private List<List<string>> ParseCSVIntoCards(string fileString)
     {
-        //split the lines on @/% to separate cards
-        string[] cards = fileString.Split('@');
-        int numCards = cards.Length;
+        //split the lines on ^ to separate textfile into different classes
+        List<string> classes = new List<string>();
+        classes.AddRange(fileString.Split('^'));
+        removeEmptyCell(classes);
+        int numClasses = classes.Count;
 
-        foreach(string str in cards)
-            Debug.Log("aaa: " + str);
+        //split the lines on @ to separate classes into different cards
+        List<List<string>> cards = new List<List<string>>();
 
-        // Split the lines on newline.
-        string[] rows = fileString.Split(System.Environment.NewLine.ToCharArray()); 
-        int numRows = rows.Length;     
+        for (int i = 0; i < classes.Count; i++) {
+            List<string> cardNames = new List<string>();
+            cardNames.AddRange(classes[i].Split('@'));
+            removeEmptyCell(cardNames);
+            cards.Add(cardNames);
+        }
+        int numCards = cards.Count;
 
-        if (numRows == 0) return null; // Empty file
+        return cards;
+    }
 
-        string [][] parsed = new string [numRows][];
-        for (int r = 0; r < numRows; r++)
-        {
-            parsed[r] = rows[r].Split(','); // Split the line on comma.
+    private void assignCardsToActivities(List<List<string>> cards) {
+        activities.Activities.Clear();
+
+        for (int i = 0; i < cards.Count; i++) {
+            for (int j = 0; j < cards[i].Count; j++) {
+                HumanActivity humanActivity = new HumanActivity();
+                //assign class
+                humanActivity.ActivityClass = removeComma(cards[i][0]);
+
+                //parse by &
+                List<string> targets = new List<string>();
+                if (j >= 1) {
+                    targets.AddRange(cards[i][j].Split('&'));
+                    removeEmptyCell(targets);
+
+                    //clean extra ',' and separate name section by ','
+                    targets[0] = removeComma(targets[0]);
+                    string[] nameSection = targets[0].Split(',');
+
+                    //assign activity name
+                    humanActivity.ActivityName = nameSection[0];
+
+                    //assign activity group
+                    humanActivity.ActivityGroup = nameSection[1];
+
+                    //deal with first narratives
+                    string[] firstNarrativeGroup = targets[1].Split(System.Environment.NewLine.ToCharArray());
+                    foreach (string firstNarrativeLine in firstNarrativeGroup) {
+                        string[] firstNarrativeSection = firstNarrativeLine.Split('*');
+                        
+                        if (firstNarrativeSection.Length > 1) {
+                            //assign first narrative
+                            humanActivity.FirstNarratives.Add(firstNarrativeSection[0]);
+
+                            //split by ',' to get conditions/priorities/targeting type out
+                            List<string> firstNarrativeConditions = new List<string>(); 
+                            firstNarrativeConditions.AddRange(firstNarrativeSection[1].Split(','));
+                            removeEmptyCell(firstNarrativeConditions);
+                            //assign priorities
+                            humanActivity.FirstActivityPriorities.Add(int.Parse(firstNarrativeConditions[0]));
+
+                            //assign conditions
+                            humanActivity.FirstConditions.Add(firstNarrativeConditions[1]);
+                        }
+                    }
+
+                    //deal with second narratives (if have one)
+                    if (targets.Count-1 >= 2) {
+                        string[] secondNarrativeGroup = targets[2].Split(System.Environment.NewLine.ToCharArray());
+                        foreach (string secondNarrativeLine in secondNarrativeGroup) {
+                            string[] secondNarrativeSection = secondNarrativeLine.Split('*');
+
+                            if (secondNarrativeSection.Length > 1) {
+                                //assign second narrative
+                                humanActivity.SecondNarratives.Add(secondNarrativeSection[0]);
+
+                                //split by ',' to get conditions/priorities/targeting type out
+                                List<string> secondNarrativeConditions = new List<string>(); 
+                                secondNarrativeConditions.AddRange(secondNarrativeSection[1].Split(','));
+                                removeEmptyCell(secondNarrativeConditions);
+
+                                //assign priorities
+                                humanActivity.SecondActivityPriorities.Add(int.Parse(secondNarrativeConditions[0]));
+
+                                //assign conditions
+                                humanActivity.SecondConditions.Add(secondNarrativeConditions[1]);
+
+                                //assign affecting type
+                                humanActivity.SecondAffectingTypes.Add(secondNarrativeConditions[2]);
+                            }
+                        }
+                    }
+                }
+
+                //clean and add to the scritable object
+                removeEmptyCell(humanActivity.FirstNarratives);
+                removeEmptyCell(humanActivity.SecondNarratives);
+                activities.Activities.Add(humanActivity);
+            }
         }
 
-        return parsed;
+        //remove empty elements in the list
+        removeEmptyCell(activities.Activities);
+    }
+
+
+    /* remove empty cell in the string list
+       @param list that needs to remove empty cell*/
+    private void removeEmptyCell(List<string> list) {
+        List<int> removeIndexes = new List<int>();
+
+        //find all empty cell indexes
+        for (int i = 0; i < list.Count; i++)
+            if (list[i].ToLower().Trim().Equals("") || list[i].ToLower().Trim().Equals("\""))
+                removeIndexes.Add(i);
+        
+        //remove those cells from the string list
+        for (int i = removeIndexes.Count-1; i >= 0; i--)
+            list.RemoveAt(removeIndexes[i]);
+    }
+
+    /* remove empty cell in the HumanActivity list
+       @param list that needs to remove empty cell*/
+    private void removeEmptyCell(List<HumanActivity> list) {
+        List<int> removeIndexes = new List<int>();
+
+        //find all empty cell indexes
+        for (int i = 0; i < list.Count; i++) {
+            string temp = list[i].ActivityName;
+            if (temp == null) {
+                removeIndexes.Add(i);
+            }
+        }
+        
+        //remove those cells from the string list
+        for (int i = removeIndexes.Count-1; i >= 0; i--)
+            list.RemoveAt(removeIndexes[i]);
+    }
+
+    /* remove extra ',' from the end of the string
+       @param str that need to remove
+       @return string the string after remove ','*/
+    public string removeComma(string str) {
+        char[] characters = str.Trim().ToCharArray();
+        for (int i = characters.Length-1; i >= 0; i--) {
+            if (!characters[i].Equals(','))
+                return str.Substring(0, i+1);
+        }
+        return str;
+    }
+    #endregion
+
+    /* add cards to active cards (which will be played in the next round)
+       if the same one is already in the active cards, then return false
+       if the same class one is already in the active cards, then replace that one with this one
+       @param activity the activitythat needs to be added
+       @return bool return if sucessfully added*/
+    public bool addToActiveCards(HumanActivity activity) {
+        for (int i = 0; i < ActiveCards.Count; i++) {
+            if (activity.Equals(ActiveCards[i]))
+                return false;
+            if (activity.ActivityClass.ToLower().Trim().Equals(ActiveCards[i].ActivityClass.ToLower().Trim())) {
+                ActiveCards[i] = activity;
+                return true;
+            }
+        }
+        activeCards.Add(activity);
+        return true;
+    }
+
+    /* add cards to active cards (which will be played in the next round)
+       call addToActiveCards(HumanActivity)
+       @param activityName the name of the activity that needs to be added
+       @return bool return if sucessfully added*/
+    public bool addToActiveCards(string activityName) {
+        foreach (HumanActivity activity in activities.Activities)
+            if (activity.ActivityName.ToLower().Trim().Equals(activityName.ToLower().Trim()))
+                return addToActiveCards(activity);
+        return false;
+    }
+
+    /* use for deciding should targetingClass considers adding the narrative with this condition to their pending list
+       @param condition the condition of the HumanActivity
+       @param targetingClass the class this condition is refering to
+       @return bool the boolean that if condition has met*/
+    public bool checkCondition(string condition, string targetingClass) {
+        //get what card this condition is targeting
+        HumanActivity targetingActivity = null;
+        foreach (HumanActivity activity in ActiveCards) {
+            if (activity.ActivityClass.Equals(targetingClass)) {
+                targetingActivity = activity;
+                break; 
+            }
+        }
+
+        //if targeting activity class is not in playing, break out
+        if (targetingActivity==null)
+            return false;
+
+        //check conditions
+        if (condition.ToLower().Trim().Equals("any"))
+            return true;
+        else {
+            //separate condition string by '%'
+            string[] conditionSections = condition.ToLower().Trim().Split('%');
+
+            //check operator
+            switch (conditionSections[1]) {
+                case "==":
+                    //switch according to first element
+                    switch (conditionSections[0]) {
+                        case "duration":
+                            int duration = int.Parse(conditionSections[2]);
+                            if (targetingActivity.Duration == duration)
+                                return true;
+                            break;
+                        case "other":
+                            return true;
+                        case "group free":
+                            if (targetingActivity.ActivityGroup.ToLower().Trim().Equals("free"))
+                                return true;
+                            break;
+                        default:
+                            //if card with name of conditionSection[0] and conditionSection[2] are all in the active cards then true
+                            bool hasCard1 = false, hasCard2 = false;
+                            foreach (HumanActivity activeActivity in activeCards) {
+                                if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[0].ToLower().Trim()))
+                                    hasCard1 = true;
+                                if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[2].ToLower().Trim())) 
+                                    hasCard2 = true;
+                            }
+                            if (hasCard1 && hasCard2)
+                                return true;
+                            break;
+                    }
+                    break;
+
+                case ">=":
+                    //switch according to first element
+                    switch (conditionSections[0]) {
+                        case "duration":
+                            int duration = int.Parse(conditionSections[2]);
+                            if (targetingActivity.Duration >= duration)
+                                return true;
+                            break;
+                        case "other":
+                            return true;
+                        case "group free":
+                            if (targetingActivity.ActivityGroup.ToLower().Trim().Equals("free"))
+                                return true;
+                            break;
+                        default:
+                            //if the start time of card with name of conditionSection[0] is >= conditionSection[2] then true
+                            HumanActivity activity1 = null, activity2 = null;
+                            foreach (HumanActivity activeActivity in activeCards) {
+                                if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[0].ToLower().Trim()))
+                                    activity1 = activeActivity;
+                                if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[2].ToLower().Trim())) 
+                                    activity2 = activeActivity;
+                            }
+                            if (activity1 != null && activity1.StartYears[0] >= CurrentYear)
+                                return true;
+                            break;
+                    }
+                    break;
+
+                case "<=":
+                    //switch according to first element
+                    switch (conditionSections[0]) {
+                        case "duration":
+                            int duration = int.Parse(conditionSections[2]);
+                            if (targetingActivity.Duration <= duration)
+                                return true;
+                            break;
+                        case "other":
+                            return true;
+                        case "group free":
+                            if (targetingActivity.ActivityGroup.ToLower().Trim().Equals("free"))
+                                return true;
+                            break;
+                        default:
+                            //if the start time of card with name of conditionSection[0] is <= conditionSection[2] then true
+                            HumanActivity activity1 = null, activity2 = null;
+                            foreach (HumanActivity activeActivity in activeCards) {
+                                if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[0].ToLower().Trim()))
+                                    activity1 = activeActivity;
+                                if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[2].ToLower().Trim())) 
+                                    activity2 = activeActivity;
+                            }
+                            if (activity1 != null && activity1.StartYears[0] <= CurrentYear)
+                                return true;
+                            break;
+                    }
+                    break;
+            }
+            
+        }
+        return false;
+    }
+
+    public void roundEnd() {
+
+        //assign cards into roles
+        foreach (ActivityRole role in Roles) {
+            foreach (HumanActivity activity in activeCards) { 
+                if (role.ActivityClass == null) Debug.Log("role WTF");
+                if (activity.ActivityClass == null) Debug.Log("activity WTF");
+                if (role.ActivityClass.ToLower().Trim().Equals(activity.ActivityClass.ToLower().Trim()))
+                    role.Activity = activity;
+            }
+
+            //play card
+            if (role.IsInGame)
+                role.Activity.activateForAYear(CurrentYear);
+        }
+
+        foreach (ActivityRole role in Roles) {
+            if (role.IsInGame) {
+                //adding potential first narrative into pending list
+                for (int i = 0; i < role.Activity.FirstConditions.Count; i++) {
+                    if (checkCondition(role.Activity.FirstConditions[i], role.ActivityClass)) {
+                        role.FirstPendingList.Add(role.Activity.FirstNarratives[i]);
+                        role.FirstPriorityList.Add(role.Activity.FirstActivityPriorities[i]);
+                    }
+                }
+
+                //decides first narrative from pending list based on priority
+                int currentPriority = -1;
+                for (int i = 0; i < role.FirstPendingList.Count; i++) {
+                    if (role.FirstPriorityList[i] > currentPriority) {
+                        role.FirstNarrative = role.FirstPendingList[i];
+                        currentPriority = role.FirstPriorityList[i];
+                    }
+                }
+
+                ActivityRole affectingRole = null;
+                //adding potential second narrative into pending list
+                for (int i = 0; i < role.Activity.SecondConditions.Count; i++) {
+                    if (checkCondition(role.Activity.SecondConditions[i], role.Activity.SecondAffectingTypes[i])) {
+                        Debug.Log(role.Activity.ActivityName + " " + role.Activity.SecondConditions[i]);
+                        //get the affecting type card
+                        foreach (ActivityRole targetingRole in Roles) 
+                            if (role.Activity.SecondAffectingTypes[i].ToLower().Trim().Equals(targetingRole.ActivityClass.ToLower().Trim()))
+                                affectingRole = targetingRole;
+
+                        //add to affecting card second pending list if it's in game
+                        if (affectingRole != null && affectingRole.IsInGame) {
+                            Debug.Log("aff");
+                            affectingRole.SecondPendingList.Add(role.Activity.SecondNarratives[i]);
+                            affectingRole.SecondPriorityList.Add(role.Activity.SecondActivityPriorities[i]);
+                            Debug.Log(affectingRole.SecondPendingList[affectingRole.SecondPendingList.Count-1]);
+
+                            //decides second narrative from pending list based on priority
+                            currentPriority = -1;
+                            for (int j = 0; j < affectingRole.SecondPendingList.Count; j++) {
+                                if (affectingRole.SecondPriorityList[j] > currentPriority) {
+                                    affectingRole.SecondNarrative = affectingRole.SecondPendingList[j];
+                                    Debug.Log(affectingRole.SecondNarrative);
+                                    currentPriority = affectingRole.SecondPriorityList[j];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

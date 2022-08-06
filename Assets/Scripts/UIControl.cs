@@ -22,7 +22,7 @@ public class UIControl : MonoBehaviour
         upperText.color = upperColor;
         companyText.color = companyColor;
         policymakerText.color = policymakerColor;
-
+        
         textGroup = new List<TextMeshProUGUI>() {workingText, middleText, upperText, companyText, policymakerText};
     }
 
@@ -30,6 +30,12 @@ public class UIControl : MonoBehaviour
     {
         if (gameManager != null)
             yearText.text = gameManager.CurrentYear+"";
+        
+        workingText.text = gameManager.Roles[0].FirstNarrative + " " + gameManager.Roles[0].SecondNarrative;
+        middleText.text = gameManager.Roles[1].FirstNarrative + " " + gameManager.Roles[1].SecondNarrative;
+        upperText.text = gameManager.Roles[2].FirstNarrative + " " + gameManager.Roles[2].SecondNarrative;
+        companyText.text = gameManager.Roles[3].FirstNarrative + " " + gameManager.Roles[3].SecondNarrative;
+        policymakerText.text = gameManager.Roles[4].FirstNarrative + " " + gameManager.Roles[4].SecondNarrative;
     }
 
     public void randomChangeText() {
