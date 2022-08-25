@@ -24,8 +24,6 @@ public class GameManager : MonoBehaviour
         new ActivityRole("Company"), new ActivityRole("Policymaker")
     };
 
-    //phases
-    private bool isInReadingPhase = false;
     private UIControl uiControl;
 
     #region FSM
@@ -220,6 +218,9 @@ public class GameManager : MonoBehaviour
 
                             //assign conditions
                             humanActivity.FirstConditions.Add(firstNarrativeConditions[1]);
+
+                            //assign scores
+                            humanActivity.FirstScore.Add(int.Parse(firstNarrativeConditions[3]));
                         }
                     }
 
@@ -246,6 +247,9 @@ public class GameManager : MonoBehaviour
 
                                 //assign affecting type
                                 humanActivity.SecondAffectingTypes.Add(secondNarrativeConditions[2]);
+
+                                //assign scores
+                                humanActivity.SecondScore.Add(int.Parse(secondNarrativeConditions[3]));
                             }
                         }
                     }
@@ -481,17 +485,22 @@ public class GameManager : MonoBehaviour
                     if (checkCondition(role.Activity.FirstConditions[i], role.ActivityClass)) {
                         role.FirstPendingList.Add(role.Activity.FirstNarratives[i]);
                         role.FirstPriorityList.Add(role.Activity.FirstActivityPriorities[i]);
+                        role.FirstScoreList.Add(role.Activity.FirstScore[i]);
                     }
                 }
 
-                //decides first narrative from pending list based on priority
+                //decides first narrative and how much score changed from pending list based on priority
                 int currentPriority = -1;
+                int changingScore = 0;
                 for (int i = 0; i < role.FirstPendingList.Count; i++) {
                     if (role.FirstPriorityList[i] > currentPriority) {
                         role.FirstNarrative = role.FirstPendingList[i];
+                        changingScore = role.FirstScoreList[i];
                         currentPriority = role.FirstPriorityList[i];
                     }
                 }
+                //change score
+                role.Score += changingScore;
 
                 ActivityRole affectingRole = null;
                 //adding potential second narrative into pending list
@@ -506,22 +515,27 @@ public class GameManager : MonoBehaviour
                         if (affectingRole != null && affectingRole.IsInGame) {
                             affectingRole.SecondPendingList.Add(role.Activity.SecondNarratives[i]);
                             affectingRole.SecondPriorityList.Add(role.Activity.SecondActivityPriorities[i]);
+                            affectingRole.SecondScoreList.Add(role.Activity.SecondScore[i]);
                             //Debug.Log(affectingRole.SecondPendingList[affectingRole.SecondPendingList.Count-1]);
 
-                            //decides second narrative from pending list based on priority
+                            //decides second narrative and how much score changed from pending list based on priority
+                            changingScore = 0;
                             currentPriority = -1;
                             for (int j = 0; j < affectingRole.SecondPendingList.Count; j++) {
                                 if (affectingRole.SecondPriorityList[j] > currentPriority) {
                                     affectingRole.SecondNarrative = affectingRole.SecondPendingList[j];
+                                    changingScore = affectingRole.SecondScoreList[j];
                                     //Debug.Log(affectingRole.SecondNarrative);
                                     currentPriority = affectingRole.SecondPriorityList[j];
                                 }
                             }
+                            //change score
+                            affectingRole.Score += changingScore;
                         }
                     }
                 }
                 //display narratives on UI
-                role.NarrativeText.text = role.FirstNarrative + " " + role.SecondNarrative;
+                role.NarrativeText.text = role.FirstNarrative + " " + role.SecondNarrative + " - " + role.ScoreName + ": " + role.Score;
             }
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
@@ -536,6 +550,14 @@ public class GameManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    /* show each role's name and their score */
+    public void showRoleNames() {
+        foreach (ActivityRole role in Roles) {
+            role.NarrativeText.text = role.ActivityClass + " - " + role.ScoreName + ": " + role.Score;
+        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
     }
 
     /* change role's narrative text into the activity display name*/

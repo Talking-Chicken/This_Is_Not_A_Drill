@@ -14,8 +14,10 @@ public class HumanActivity
     [SerializeField] private List<string> firstNarratives = new List<string>(), secondNarratives = new List<string>(), 
                                           firstConditions = new List<string>(), secondConditions = new List<string>(),
                                           secondAffectingTypes = new List<string>();
-    [SerializeField] private List<int> firstActivityPriorities = new List<int>(), secondActivityPriorities = new List<int>();
+    [SerializeField] private List<int> firstActivityPriorities = new List<int>(), secondActivityPriorities = new List<int>(),
+                                       firstScore = new List<int>(), secondScore = new List<int>();
     private bool isActivating = false;
+    private int score = 0;
 
     //getters & setters
     public string ActivityName {get=>activityName;set=>activityName=value;}
@@ -30,8 +32,11 @@ public class HumanActivity
     public List<string> SecondAffectingTypes {get=>secondAffectingTypes;set=>secondAffectingTypes=value;}
     public List<int> FirstActivityPriorities {get=>firstActivityPriorities;set=>firstActivityPriorities=value;}
     public List<int> SecondActivityPriorities {get=>secondActivityPriorities;set=>secondActivityPriorities=value;}
+    public List<int> FirstScore {get=>firstScore;set=>firstScore=value;}
+    public List<int> SecondScore {get=>secondScore;set=>secondScore=value;}
     public string ActivityClass {get=>activityClass;set=>activityClass = value;}
     public string ActivityGroup {get=>activityGroup;set=>activityGroup=value;}
+    public int Score {get=>score; set=>score=value;}
 
     public HumanActivity() {
         
