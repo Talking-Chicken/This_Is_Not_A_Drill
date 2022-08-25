@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ActivityRole
 {
@@ -9,6 +10,7 @@ public class ActivityRole
     private List<int> firstPriorityList = new List<int>(), secondPriorityList = new List<int>();
     private HumanActivity activity;
     private bool isInGame = false;
+    private TextMeshProUGUI narrativeText;
 
     //getters & setters
     public string ActivityClass{get=>activityClass;set=>activityClass=value;}
@@ -20,6 +22,7 @@ public class ActivityRole
     public List<string> SecondPendingList{get=>secondPendingList;set=>secondPendingList=value;}
     public List<int> FirstPriorityList{get=>firstPriorityList;set=>firstPriorityList=value;}
     public List<int> SecondPriorityList{get=>secondPriorityList;set=>secondPriorityList=value;}
+    public TextMeshProUGUI NarrativeText{get=>narrativeText; set=>narrativeText=value;}
     
     public ActivityRole(string className) {
         ActivityClass = className;

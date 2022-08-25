@@ -13,6 +13,15 @@ public class UIControl : MonoBehaviour
     private List<TextMeshProUGUI> textGroup;
 
     [SerializeField] private string[] randomText;
+
+    //getters & setters
+    public TextMeshProUGUI WorkingText{get=>workingText;}
+    public TextMeshProUGUI MiddleText{get=>middleText;}
+    public TextMeshProUGUI UpperText{get=>upperText;}
+    public TextMeshProUGUI CompanyText{get=>companyText;}
+    public TextMeshProUGUI PolicymakerText{get=>policymakerText;}
+    public RectTransform Descriptions{get=>descriptions;}
+
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -31,11 +40,11 @@ public class UIControl : MonoBehaviour
         if (gameManager != null)
             yearText.text = gameManager.CurrentYear+"";
         
-        workingText.text = gameManager.Roles[0].FirstNarrative + " " + gameManager.Roles[0].SecondNarrative;
-        middleText.text = gameManager.Roles[1].FirstNarrative + " " + gameManager.Roles[1].SecondNarrative;
-        upperText.text = gameManager.Roles[2].FirstNarrative + " " + gameManager.Roles[2].SecondNarrative;
-        companyText.text = gameManager.Roles[3].FirstNarrative + " " + gameManager.Roles[3].SecondNarrative;
-        policymakerText.text = gameManager.Roles[4].FirstNarrative + " " + gameManager.Roles[4].SecondNarrative;
+        // workingText.text = gameManager.Roles[0].FirstNarrative + " " + gameManager.Roles[0].SecondNarrative;
+        // middleText.text = gameManager.Roles[1].FirstNarrative + " " + gameManager.Roles[1].SecondNarrative;
+        // upperText.text = gameManager.Roles[2].FirstNarrative + " " + gameManager.Roles[2].SecondNarrative;
+        // companyText.text = gameManager.Roles[3].FirstNarrative + " " + gameManager.Roles[3].SecondNarrative;
+        // policymakerText.text = gameManager.Roles[4].FirstNarrative + " " + gameManager.Roles[4].SecondNarrative;
     }
 
     public void randomChangeText() {
@@ -44,5 +53,7 @@ public class UIControl : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(descriptions as RectTransform);
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
+
+
 
 }

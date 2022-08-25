@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class GameManager : MonoBehaviour
     private float currentTime, deltaYearTime;
     [SerializeField] private int startYear, endYear;
     [SerializeField] private float totalDuration; //time in seconds
-    private List<HumanActivity> activatingActivities = new List<HumanActivity>(), DeactivatingActivities = new List<HumanActivity>();
+    private List<HumanActivity> activatingActivities = new List<HumanActivity>(), //only one per role will be at this list
+                                DeactivatingActivities = new List<HumanActivity>(); 
 
     //cards
     [SerializeField] private ActivityData activities;
@@ -22,7 +24,40 @@ public class GameManager : MonoBehaviour
         new ActivityRole("Company"), new ActivityRole("Policymaker")
     };
 
+    //phases
+    private bool isInReadingPhase = false;
     private UIControl uiControl;
+
+    #region FSM
+    // private BoardState state;
+    private GameStateBase currentState;
+    public GameStateIdle stateIdle = new GameStateIdle();
+    public GameStateIntro stateIntro = new GameStateIntro();
+    public GameStatePlay statePlay = new GameStatePlay();
+    public GameStateReview stateReview = new GameStateReview();
+    public GameStateEnd stateEnd = new GameStateEnd();
+
+
+    public void ChangeState(GameStateBase newState)
+    {
+        if (!newState.Equals(currentState)) {
+            if (currentState != null)
+            {
+                currentState.LeaveState(this);
+
+                //test
+                Debug.Log("Changing from " + currentState + " to " + newState);
+            }
+
+            currentState = newState;
+
+            if (currentState != null)
+            {
+                currentState.EnterState(this);
+            }
+        }
+    }
+    #endregion
 
     //getters & setters
     public int CurrentYear{get=>currentYear;private set=>currentYear=value;}
@@ -39,6 +74,32 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(timeCountDown(deltaYearTime));
 
+        //assign textmeshproUGUI to roles
+        foreach(ActivityRole role in Roles) {
+            switch(role.ActivityClass.Trim().ToLower()) {
+                case "working class":
+                    role.NarrativeText = uiControl.WorkingText;
+                    break;
+                case "middle class":
+                    role.NarrativeText = uiControl.MiddleText;
+                    break;
+                case "upper class":
+                    role.NarrativeText = uiControl.UpperText;
+                    break;
+                case "company":
+                    role.NarrativeText = uiControl.CompanyText;
+                    break;
+                case "policymaker":
+                    role.NarrativeText = uiControl.PolicymakerText;
+                    break;
+                default:
+                    Debug.Log("Can't find " + role.ActivityClass.Trim().ToLower() + " when assigning narrative texts");
+                    break;
+            }
+            if (role != null)
+                role.NarrativeText.text = role.ActivityClass;
+        }
+
         //test
         addToActiveCards("ban ads");
         addToActiveCards("electric car");
@@ -49,7 +110,9 @@ public class GameManager : MonoBehaviour
         foreach (ActivityRole role in Roles)
             role.IsInGame = true;
         
-        roundEnd();
+        currentState = stateIdle;
+
+        //roundEnd();
         // for (int i = 0; i < activeCards.Count; i++) {
         //     Debug.Log(i + " is " + checkCondition(activeCards[i].FirstConditions[1], activeCards[i].ActivityClass));
         // }
@@ -66,6 +129,11 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
             activities.Activities[0].StartYears.Add(1);
+        
+        if (Input.GetKeyDown(KeyCode.P))
+            roundEnd();
+        
+        currentState.Update(this);
     }
 
     public void nextYear() {
@@ -130,6 +198,9 @@ public class GameManager : MonoBehaviour
 
                     //assign activity group
                     humanActivity.ActivityGroup = nameSection[1];
+
+                    //assign display name
+                    humanActivity.DisplayName = nameSection[2];
 
                     //deal with first narratives
                     string[] firstNarrativeGroup = targets[1].Split(System.Environment.NewLine.ToCharArray());
@@ -252,7 +323,7 @@ public class GameManager : MonoBehaviour
                 return true;
             }
         }
-        activeCards.Add(activity);
+        ActiveCards.Add(activity);
         return true;
     }
 
@@ -311,7 +382,7 @@ public class GameManager : MonoBehaviour
                         default:
                             //if card with name of conditionSection[0] and conditionSection[2] are all in the active cards then true
                             bool hasCard1 = false, hasCard2 = false;
-                            foreach (HumanActivity activeActivity in activeCards) {
+                            foreach (HumanActivity activeActivity in ActiveCards) {
                                 if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[0].ToLower().Trim()))
                                     hasCard1 = true;
                                 if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[2].ToLower().Trim())) 
@@ -340,7 +411,7 @@ public class GameManager : MonoBehaviour
                         default:
                             //if the start time of card with name of conditionSection[0] is >= conditionSection[2] then true
                             HumanActivity activity1 = null, activity2 = null;
-                            foreach (HumanActivity activeActivity in activeCards) {
+                            foreach (HumanActivity activeActivity in ActiveCards) {
                                 if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[0].ToLower().Trim()))
                                     activity1 = activeActivity;
                                 if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[2].ToLower().Trim())) 
@@ -369,7 +440,7 @@ public class GameManager : MonoBehaviour
                         default:
                             //if the start time of card with name of conditionSection[0] is <= conditionSection[2] then true
                             HumanActivity activity1 = null, activity2 = null;
-                            foreach (HumanActivity activeActivity in activeCards) {
+                            foreach (HumanActivity activeActivity in ActiveCards) {
                                 if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[0].ToLower().Trim()))
                                     activity1 = activeActivity;
                                 if (activeActivity.ActivityName.ToLower().Trim().Equals(conditionSections[2].ToLower().Trim())) 
@@ -386,13 +457,14 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+
     public void roundEnd() {
 
         //assign cards into roles
         foreach (ActivityRole role in Roles) {
-            foreach (HumanActivity activity in activeCards) { 
-                if (role.ActivityClass == null) Debug.Log("role WTF");
-                if (activity.ActivityClass == null) Debug.Log("activity WTF");
+            foreach (HumanActivity activity in ActiveCards) { 
+                if (role.ActivityClass == null) Debug.Log("role class WTF");
+                if (activity.ActivityClass == null) Debug.Log("activity class WTF");
                 if (role.ActivityClass.ToLower().Trim().Equals(activity.ActivityClass.ToLower().Trim()))
                     role.Activity = activity;
             }
@@ -425,7 +497,6 @@ public class GameManager : MonoBehaviour
                 //adding potential second narrative into pending list
                 for (int i = 0; i < role.Activity.SecondConditions.Count; i++) {
                     if (checkCondition(role.Activity.SecondConditions[i], role.Activity.SecondAffectingTypes[i])) {
-                        Debug.Log(role.Activity.ActivityName + " " + role.Activity.SecondConditions[i]);
                         //get the affecting type card
                         foreach (ActivityRole targetingRole in Roles) 
                             if (role.Activity.SecondAffectingTypes[i].ToLower().Trim().Equals(targetingRole.ActivityClass.ToLower().Trim()))
@@ -433,24 +504,56 @@ public class GameManager : MonoBehaviour
 
                         //add to affecting card second pending list if it's in game
                         if (affectingRole != null && affectingRole.IsInGame) {
-                            Debug.Log("aff");
                             affectingRole.SecondPendingList.Add(role.Activity.SecondNarratives[i]);
                             affectingRole.SecondPriorityList.Add(role.Activity.SecondActivityPriorities[i]);
-                            Debug.Log(affectingRole.SecondPendingList[affectingRole.SecondPendingList.Count-1]);
+                            //Debug.Log(affectingRole.SecondPendingList[affectingRole.SecondPendingList.Count-1]);
 
                             //decides second narrative from pending list based on priority
                             currentPriority = -1;
                             for (int j = 0; j < affectingRole.SecondPendingList.Count; j++) {
                                 if (affectingRole.SecondPriorityList[j] > currentPriority) {
                                     affectingRole.SecondNarrative = affectingRole.SecondPendingList[j];
-                                    Debug.Log(affectingRole.SecondNarrative);
+                                    //Debug.Log(affectingRole.SecondNarrative);
                                     currentPriority = affectingRole.SecondPriorityList[j];
                                 }
                             }
                         }
                     }
                 }
+                //display narratives on UI
+                role.NarrativeText.text = role.FirstNarrative + " " + role.SecondNarrative;
             }
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+    }
+
+    /* read card name from Python, and add the card to current playing cards
+       @return true if added successfully, false if the card's role is not in play */
+    public bool readCardInfo(string cardID) {
+        foreach (HumanActivity activity in ActiveCards) {
+            if (activity.ActivityName.ToLower().Trim().Equals(cardID.ToLower().Trim())) {
+                
+            }
+        }
+        return false;
+    }
+
+    /* change role's narrative text into the activity display name*/
+    public void showTappedCards() {
+        foreach (ActivityRole role in Roles) {
+            if (role.IsInGame) {
+                foreach (HumanActivity activity in ActiveCards) {
+                    if (activity.ActivityClass.Equals(role.ActivityClass)) {
+                        role.NarrativeText.text = activity.DisplayName;
+                    }
+                }
+            }
+        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+    }
+
+    public IEnumerator waitToChangeState(float waitTime, GameStateBase changingState) {
+        yield return new WaitForSeconds(waitTime);
+        ChangeState(changingState);
     }
 }

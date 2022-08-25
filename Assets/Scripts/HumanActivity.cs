@@ -7,7 +7,7 @@ using NaughtyAttributes;
 [Serializable]
 public class HumanActivity
 {
-    [SerializeField] private string activityName;
+    [SerializeField] private string activityName, displayName;
     [SerializeField] private List<int> startYears = new List<int>(), endYears = new List<int>();
     [SerializeField] private int duration = 0;
     [SerializeField] private string activityClass, activityGroup;
@@ -19,6 +19,7 @@ public class HumanActivity
 
     //getters & setters
     public string ActivityName {get=>activityName;set=>activityName=value;}
+    public string DisplayName {get=>displayName;set=>displayName=value;}
     public List<int> StartYears {get=>startYears;set=>startYears=value;}
     public List<int> EndYears {get=>endYears;set=>endYears=value;}
     public int Duration {get=>duration;set=>duration=value;}
