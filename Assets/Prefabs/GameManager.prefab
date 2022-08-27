@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1935111669973388382}
   - component: {fileID: 1935111669973388383}
+  - component: {fileID: 3611036600545895855}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -46,5 +47,18 @@ MonoBehaviour:
   startYear: 2022
   endYear: 2050
   totalDuration: 300
-  data: {fileID: 11400000, guid: ae40af346e478c844aac423a738689f4, type: 2}
+  activities: {fileID: 11400000, guid: ae40af346e478c844aac423a738689f4, type: 2}
   cardFile: {fileID: 4900000, guid: 2d7b0afb6cc87ee45a8dd2bca3eef9a7, type: 3}
+  activeCards: []
+--- !u!114 &3611036600545895855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935111669973388381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5ab6d0904eaf344e8c13a12933faac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
