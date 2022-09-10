@@ -16,5 +16,10 @@ public class GameStateReview : GameStateBase
         if (Input.GetKeyDown(KeyCode.P))
             manager.ChangeState(manager.stateEnd);
     }
-    public override void LeaveState(GameManager manager){}
+    public override void LeaveState(GameManager manager){
+        manager.ActiveCards.Clear();
+        foreach(ActivityRole role in manager.Roles) {
+            role.Activity = null;
+        }
+    }
 }

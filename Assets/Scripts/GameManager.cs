@@ -360,6 +360,13 @@ public class GameManager : MonoBehaviour
         if (targetingActivity==null)
             return false;
 
+        foreach (ActivityRole role in Roles) {
+            if (role.ActivityClass.Trim().ToLower().Equals(targetingClass.Trim().ToLower())) {
+                if (role.Activity == null)
+                    return false;
+            }
+        }
+
         //check conditions
         if (condition.ToLower().Trim().Equals("any"))
             return true;
@@ -454,7 +461,7 @@ public class GameManager : MonoBehaviour
                                 return true;
                             break;
                     }
-                    break;
+                break;
             }
             
         }
@@ -472,70 +479,76 @@ public class GameManager : MonoBehaviour
                 if (role.ActivityClass.ToLower().Trim().Equals(activity.ActivityClass.ToLower().Trim()))
                     role.Activity = activity;
             }
-
             //play card
-            if (role.IsInGame)
+            if (role.IsInGame && role.Activity != null)
                 role.Activity.activateForAYear(CurrentYear);
         }
 
         foreach (ActivityRole role in Roles) {
             if (role.IsInGame) {
-                //adding potential first narrative into pending list
-                for (int i = 0; i < role.Activity.FirstConditions.Count; i++) {
-                    if (checkCondition(role.Activity.FirstConditions[i], role.ActivityClass)) {
-                        role.FirstPendingList.Add(role.Activity.FirstNarratives[i]);
-                        role.FirstPriorityList.Add(role.Activity.FirstActivityPriorities[i]);
-                        role.FirstScoreList.Add(role.Activity.FirstScore[i]);
-                    }
-                }
+                if (role.Activity != null) {
 
-                //decides first narrative and how much score changed from pending list based on priority
-                int currentPriority = -1;
-                int changingScore = 0;
-                for (int i = 0; i < role.FirstPendingList.Count; i++) {
-                    if (role.FirstPriorityList[i] > currentPriority) {
-                        role.FirstNarrative = role.FirstPendingList[i];
-                        changingScore = role.FirstScoreList[i];
-                        currentPriority = role.FirstPriorityList[i];
-                    }
-                }
-                //change score
-                role.Score += changingScore;
-
-                ActivityRole affectingRole = null;
-                //adding potential second narrative into pending list
-                for (int i = 0; i < role.Activity.SecondConditions.Count; i++) {
-                    if (checkCondition(role.Activity.SecondConditions[i], role.Activity.SecondAffectingTypes[i])) {
-                        //get the affecting type card
-                        foreach (ActivityRole targetingRole in Roles) 
-                            if (role.Activity.SecondAffectingTypes[i].ToLower().Trim().Equals(targetingRole.ActivityClass.ToLower().Trim()))
-                                affectingRole = targetingRole;
-
-                        //add to affecting card second pending list if it's in game
-                        if (affectingRole != null && affectingRole.IsInGame) {
-                            affectingRole.SecondPendingList.Add(role.Activity.SecondNarratives[i]);
-                            affectingRole.SecondPriorityList.Add(role.Activity.SecondActivityPriorities[i]);
-                            affectingRole.SecondScoreList.Add(role.Activity.SecondScore[i]);
-                            //Debug.Log(affectingRole.SecondPendingList[affectingRole.SecondPendingList.Count-1]);
-
-                            //decides second narrative and how much score changed from pending list based on priority
-                            changingScore = 0;
-                            currentPriority = -1;
-                            for (int j = 0; j < affectingRole.SecondPendingList.Count; j++) {
-                                if (affectingRole.SecondPriorityList[j] > currentPriority) {
-                                    affectingRole.SecondNarrative = affectingRole.SecondPendingList[j];
-                                    changingScore = affectingRole.SecondScoreList[j];
-                                    //Debug.Log(affectingRole.SecondNarrative);
-                                    currentPriority = affectingRole.SecondPriorityList[j];
-                                }
-                            }
-                            //change score
-                            affectingRole.Score += changingScore;
+                    //adding potential first narrative into pending list
+                    for (int i = 0; i < role.Activity.FirstConditions.Count; i++) {
+                        if (checkCondition(role.Activity.FirstConditions[i], role.ActivityClass)) {
+                            role.FirstPendingList.Add(role.Activity.FirstNarratives[i]);
+                            role.FirstPriorityList.Add(role.Activity.FirstActivityPriorities[i]);
+                            role.FirstScoreList.Add(role.Activity.FirstScore[i]);
                         }
                     }
+
+                    //decides first narrative and how much score changed from pending list based on priority
+                    int currentPriority = -1;
+                    int changingScore = 0;
+                    for (int i = 0; i < role.FirstPendingList.Count; i++) {
+                        if (role.FirstPriorityList[i] > currentPriority) {
+                            role.FirstNarrative = role.FirstPendingList[i];
+                            changingScore = role.FirstScoreList[i];
+                            currentPriority = role.FirstPriorityList[i];
+                        }
+                    }
+                    //change score
+                    role.Score += changingScore;
+
+                    ActivityRole affectingRole = null;
+                    //adding potential second narrative into pending list
+                    for (int i = 0; i < role.Activity.SecondConditions.Count; i++) {
+                        if (checkCondition(role.Activity.SecondConditions[i], role.Activity.SecondAffectingTypes[i])) {
+                            //get the affecting type card
+                            foreach (ActivityRole targetingRole in Roles) 
+                                if (role.Activity.SecondAffectingTypes[i].ToLower().Trim().Equals(targetingRole.ActivityClass.ToLower().Trim()))
+                                    affectingRole = targetingRole;
+
+                            //add to affecting card second pending list if it's in game
+                            if (affectingRole != null && affectingRole.IsInGame) {
+                                affectingRole.SecondPendingList.Add(role.Activity.SecondNarratives[i]);
+                                affectingRole.SecondPriorityList.Add(role.Activity.SecondActivityPriorities[i]);
+                                affectingRole.SecondScoreList.Add(role.Activity.SecondScore[i]);
+                                //Debug.Log(affectingRole.SecondPendingList[affectingRole.SecondPendingList.Count-1]);
+
+                                //decides second narrative and how much score changed from pending list based on priority
+                                changingScore = 0;
+                                currentPriority = -1;
+                                for (int j = 0; j < affectingRole.SecondPendingList.Count; j++) {
+                                    if (affectingRole.SecondPriorityList[j] > currentPriority) {
+                                        affectingRole.SecondNarrative = affectingRole.SecondPendingList[j];
+                                        changingScore = affectingRole.SecondScoreList[j];
+                                        //Debug.Log(affectingRole.SecondNarrative);
+                                        currentPriority = affectingRole.SecondPriorityList[j];
+                                    }
+                                }
+                                //change score
+                                affectingRole.Score += changingScore;
+                            }
+                        }
+                    }
+                    //display narratives on UI
+                    role.NarrativeText.text = role.FirstNarrative + " " + role.SecondNarrative + " - " + role.ScoreName + ": " + role.Score;
+                } else { //if there's no card input for this role this round
+                    role.NarrativeText.text = role.ActivityClass + " don't have any action this round";
                 }
-                //display narratives on UI
-                role.NarrativeText.text = role.FirstNarrative + " " + role.SecondNarrative + " - " + role.ScoreName + ": " + role.Score;
+            } else { //if the role is not in this game
+                role.NarrativeText.text = role.ActivityClass + " doesn't involve in this current game. You can use this role in the next game.";
             }
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
