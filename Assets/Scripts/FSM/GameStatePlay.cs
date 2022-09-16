@@ -23,5 +23,13 @@ public class GameStatePlay : GameStateBase
             manager.ChangeState(manager.stateReview);
         }
     }
-    public override void LeaveState(GameManager manager){}
+    public override void LeaveState(GameManager manager){
+        if (manager.IsFirstRound) {
+            manager.IsFirstRound = false;
+            foreach (ActivityRole role in manager.Roles) {
+                if (role.Activity != null)
+                    role.IsInGame = true;
+            }
+        }
+    }
 }

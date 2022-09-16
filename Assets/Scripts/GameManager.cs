@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
         new ActivityRole("Company"), new ActivityRole("Policymaker")
     };
 
+    //bool to check if it's the first round
+    private bool isFirstRound = true;
+
     private UIControl uiControl;
 
     #region FSM
@@ -61,6 +64,7 @@ public class GameManager : MonoBehaviour
     public int CurrentYear{get=>currentYear;private set=>currentYear=value;}
     public List<HumanActivity> ActiveCards{get=>activeCards;private set=>activeCards=value;}
     public List<ActivityRole> Roles{get=>roles;private set=>roles=value;}
+    public bool IsFirstRound{get=>isFirstRound; set=>isFirstRound = value;}
 
     void Start()
     {
@@ -319,6 +323,7 @@ public class GameManager : MonoBehaviour
        @param activity the activitythat needs to be added
        @return bool return if sucessfully added*/
     public bool addToActiveCards(HumanActivity activity) {
+        Debug.Log(activeCards.Count + " is this much active cards");
         for (int i = 0; i < ActiveCards.Count; i++) {
             if (activity.Equals(ActiveCards[i]))
                 return false;
@@ -328,6 +333,16 @@ public class GameManager : MonoBehaviour
             }
         }
         ActiveCards.Add(activity);
+
+        //mark the role is in game
+        if (IsFirstRound) {
+            foreach (ActivityRole role in Roles) {
+                if (activity.ActivityClass.Trim().ToLower().Equals(role.ActivityClass.Trim().ToLower())) {
+                    role.IsInGame = true;
+                }
+            }
+        }
+
         return true;
     }
 
@@ -339,6 +354,8 @@ public class GameManager : MonoBehaviour
         foreach (HumanActivity activity in activities.Activities)
             if (activity.ActivityName.ToLower().Trim().Equals(activityName.ToLower().Trim()))
                 return addToActiveCards(activity);
+        Debug.Log("Activities have " + activities.Activities.Count);
+        Debug.Log(" 2: " + activityName.ToLower().Trim());
         return false;
     }
 
@@ -578,7 +595,7 @@ public class GameManager : MonoBehaviour
         foreach (ActivityRole role in Roles) {
             if (role.IsInGame) {
                 foreach (HumanActivity activity in ActiveCards) {
-                    if (activity.ActivityClass.Equals(role.ActivityClass)) {
+                    if (activity.ActivityClass.Trim().ToLower().Equals(role.ActivityClass.Trim().ToLower())) {
                         role.NarrativeText.text = activity.DisplayName;
                     }
                 }
@@ -590,5 +607,14 @@ public class GameManager : MonoBehaviour
     public IEnumerator waitToChangeState(float waitTime, GameStateBase changingState) {
         yield return new WaitForSeconds(waitTime);
         ChangeState(changingState);
+    }
+
+    public void rebuildUI() {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+    }
+
+    public void reset() {
+        IsFirstRound = true;
+        ActiveCards.Clear();
     }
 }

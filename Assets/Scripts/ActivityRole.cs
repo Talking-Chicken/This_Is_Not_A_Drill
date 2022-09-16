@@ -60,7 +60,6 @@ public class ActivityRole
                 Debug.Log("can't find class " + className.Trim().ToLower() + " while giving initial score");
                 break;
         }
-
         Score = InitialScore;
     }
 
