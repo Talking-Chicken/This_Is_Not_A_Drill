@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class GameStatePlay : GameStateBase
 {
-    public override void EnterState(GameManager manager){}
+    public override void EnterState(GameManager manager){
+        manager.UiControl.StartCoroutine(manager.UiControl.monthCountDown());
+    }
     public override void Update(GameManager manager){
         //recieve cards info and show them on the UI
         manager.showTappedCards();
@@ -23,6 +25,7 @@ public class GameStatePlay : GameStateBase
             manager.ChangeState(manager.stateReview);
         }
     }
+    
     public override void LeaveState(GameManager manager){
         if (manager.IsFirstRound) {
             manager.IsFirstRound = false;
@@ -31,5 +34,7 @@ public class GameStatePlay : GameStateBase
                     role.IsInGame = true;
             }
         }
+
+        manager.UiControl.stopMonthCountDown();
     }
 }

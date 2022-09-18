@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     private bool isFirstRound = true;
 
     private UIControl uiControl;
+    private SoundManager soundManager;
 
     #region FSM
     // private BoardState state;
@@ -61,20 +62,22 @@ public class GameManager : MonoBehaviour
     #endregion
 
     //getters & setters
-    public int CurrentYear{get=>currentYear;private set=>currentYear=value;}
+    public int CurrentYear{get=>currentYear;set=>currentYear=value;}
     public List<HumanActivity> ActiveCards{get=>activeCards;private set=>activeCards=value;}
     public List<ActivityRole> Roles{get=>roles;private set=>roles=value;}
     public bool IsFirstRound{get=>isFirstRound; set=>isFirstRound = value;}
+    public UIControl UiControl{get=>uiControl;}
 
     void Start()
     {
-        currentYear = startYear;
+        CurrentYear = startYear;
         deltaYearTime = totalDuration/Mathf.Abs(endYear-startYear);
         List<List<string>> cards = ParseCSVIntoCards(cardFile.text);
         assignCardsToActivities(cards);
         uiControl = FindObjectOfType<UIControl>();
+        soundManager = FindObjectOfType<SoundManager>();
 
-        StartCoroutine(timeCountDown(deltaYearTime));
+        //StartCoroutine(timeCountDown(deltaYearTime));
 
         //assign textmeshproUGUI to roles
         foreach(ActivityRole role in Roles) {
@@ -323,7 +326,6 @@ public class GameManager : MonoBehaviour
        @param activity the activitythat needs to be added
        @return bool return if sucessfully added*/
     public bool addToActiveCards(HumanActivity activity) {
-        Debug.Log(activeCards.Count + " is this much active cards");
         for (int i = 0; i < ActiveCards.Count; i++) {
             if (activity.Equals(ActiveCards[i]))
                 return false;
@@ -352,10 +354,10 @@ public class GameManager : MonoBehaviour
        @return bool return if sucessfully added*/
     public bool addToActiveCards(string activityName) {
         foreach (HumanActivity activity in activities.Activities)
-            if (activity.ActivityName.ToLower().Trim().Equals(activityName.ToLower().Trim()))
+            if (activity.ActivityName.ToLower().Trim().Equals(activityName.ToLower().Trim())) {
+                soundManager.playButtonSound();
                 return addToActiveCards(activity);
-        Debug.Log("Activities have " + activities.Activities.Count);
-        Debug.Log(" 2: " + activityName.ToLower().Trim());
+            }
         return false;
     }
 
@@ -615,6 +617,7 @@ public class GameManager : MonoBehaviour
 
     public void reset() {
         IsFirstRound = true;
+        CurrentYear = startYear;
         ActiveCards.Clear();
     }
 }

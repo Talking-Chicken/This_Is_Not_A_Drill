@@ -12,7 +12,7 @@ public class ActivityRole
     private HumanActivity activity;
     private bool isInGame = false;
     private TextMeshProUGUI narrativeText;
-    private int score, initialScore;
+    private int score, initialScore, carbonEmission = 0;
 
     //getters & setters
     public string ActivityClass{get=>activityClass;set=>activityClass=value;}
@@ -30,6 +30,7 @@ public class ActivityRole
     public int Score{get=>score;set=>score=value;}
     public int InitialScore{get=>initialScore;set=>initialScore=value;}
     public string ScoreName{get=>scoreName;set=>scoreName=value;}
+    public int CarbonEmission{get=>carbonEmission;set=>carbonEmission=value;}
     
     public ActivityRole(string className) {
         ActivityClass = className;
@@ -65,6 +66,7 @@ public class ActivityRole
 
     public void reset() {
         Score = InitialScore;
+        carbonEmission = 0;
         FirstNarrative = "";
         SecondNarrative = "";
         FirstPendingList.Clear();

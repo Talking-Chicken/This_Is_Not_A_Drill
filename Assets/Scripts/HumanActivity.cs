@@ -17,7 +17,7 @@ public class HumanActivity
     [SerializeField] private List<int> firstActivityPriorities = new List<int>(), secondActivityPriorities = new List<int>(),
                                        firstScore = new List<int>(), secondScore = new List<int>();
     private bool isActivating = false;
-    private int score = 0;
+    private int score = 0, carbonEmission = 0;
 
     //getters & setters
     public string ActivityName {get=>activityName;set=>activityName=value;}
@@ -37,6 +37,7 @@ public class HumanActivity
     public string ActivityClass {get=>activityClass;set=>activityClass = value;}
     public string ActivityGroup {get=>activityGroup;set=>activityGroup=value;}
     public int Score {get=>score; set=>score=value;}
+    public int CarbonEmission{get=>carbonEmission;set=>carbonEmission=value;}
 
     public HumanActivity() {
         
