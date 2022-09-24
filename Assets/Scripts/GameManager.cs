@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NaughtyAttributes;
+//using NaughtyAttributes;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public bool isManualControl = false;
     private int currentYear;
     private float currentTime, deltaYearTime;
     [SerializeField] private int startYear, endYear;
@@ -70,6 +71,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(this.gameObject);
+
         CurrentYear = startYear;
         deltaYearTime = totalDuration/Mathf.Abs(endYear-startYear);
         List<List<string>> cards = ParseCSVIntoCards(cardFile.text);
@@ -106,11 +109,11 @@ public class GameManager : MonoBehaviour
         }
 
         //test
-        addToActiveCards("ban ads");
-        addToActiveCards("electric car");
-        addToActiveCards("riot");
-        addToActiveCards("building");
-        addToActiveCards("nuclear");
+        // addToActiveCards("ban ads");
+        // addToActiveCards("electric car");
+        // addToActiveCards("riot");
+        // addToActiveCards("building");
+        // addToActiveCards("nuclear");
         
         foreach (ActivityRole role in Roles)
             role.IsInGame = true;
@@ -603,6 +606,7 @@ public class GameManager : MonoBehaviour
             role.NarrativeText.text = role.ActivityClass + " - " + role.ScoreName + ": " + role.Score;
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+        UiControl.rebuildUI();
     }
 
     /* change role's narrative text into the activity display name*/
@@ -617,6 +621,7 @@ public class GameManager : MonoBehaviour
             }
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+        UiControl.rebuildUI();
     }
 
     public IEnumerator waitToChangeState(float waitTime, GameStateBase changingState) {
@@ -626,12 +631,14 @@ public class GameManager : MonoBehaviour
 
     public void rebuildUI() {
         LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+        UiControl.rebuildUI();
     }
 
     public void reset() {
         IsFirstRound = true;
         CurrentYear = startYear;
         ActiveCards.Clear();
+        UiControl.hideGameUI();
         foreach(ActivityRole role in Roles) {
             role.reset();
         }

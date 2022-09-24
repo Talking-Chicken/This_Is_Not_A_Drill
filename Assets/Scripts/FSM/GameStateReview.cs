@@ -6,10 +6,13 @@ public class GameStateReview : GameStateBase
 {
     public override void EnterState(GameManager manager){
         manager.roundEnd();
+        manager.UiControl.CurrentMonthIndex = 0;
+        manager.UiControl.StopAllCoroutines();
     }
     
     public override void Update(GameManager manager){
         //recieve signal of whether game continued or game has ended
+        
         if (Input.GetKeyDown(KeyCode.O)) {
             manager.ChangeState(manager.statePlay);
         }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameStateIntro : GameStateBase
 {
@@ -12,20 +11,12 @@ public class GameStateIntro : GameStateBase
             role.Activity = null;
             role.reset();
         }
+        
 
-        if (manager.isManualControl)
-            manager.StartCoroutine(manager.waitToChangeState(5, manager.statePlay));
+        manager.StartCoroutine(manager.waitToChangeState(5, manager.statePlay));
     }
-
     public override void Update(GameManager manager){
         manager.showRoleNames();
-
-        if (!manager.isManualControl)
-            if (SceneManager.GetActiveScene().name.Equals("scene3"))
-                manager.ChangeState(manager.statePlay);
     }
-
-    public override void LeaveState(GameManager manager){
-        manager.UiControl.showGameUI();
-    }
+    public override void LeaveState(GameManager manager){}
 }

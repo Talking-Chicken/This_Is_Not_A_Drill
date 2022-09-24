@@ -123,6 +123,16 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!224 &8255000 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3774931852844275131, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+  m_PrefabInstance: {fileID: 1661225101329468618}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &75437928 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 92150435610801744, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+  m_PrefabInstance: {fileID: 1661225101329468618}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,6 +226,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!224 &782833940 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3145979060794309244, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+  m_PrefabInstance: {fileID: 1661225101329468618}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +314,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &1687087393 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8133196843943289660, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+  m_PrefabInstance: {fileID: 1661225101329468618}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1897867836 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 264938849632725485, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+  m_PrefabInstance: {fileID: 1661225101329468618}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1661225101329468618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -612,6 +637,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1661225102824349587, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+      propertyPath: upperBG
+      value: 
+      objectReference: {fileID: 8255000}
+    - target: {fileID: 1661225102824349587, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+      propertyPath: middleBG
+      value: 
+      objectReference: {fileID: 75437928}
+    - target: {fileID: 1661225102824349587, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+      propertyPath: policyBG
+      value: 
+      objectReference: {fileID: 782833940}
+    - target: {fileID: 1661225102824349587, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+      propertyPath: companyBG
+      value: 
+      objectReference: {fileID: 1897867836}
+    - target: {fileID: 1661225102824349587, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
+      propertyPath: workingBG
+      value: 
+      objectReference: {fileID: 1687087393}
     - target: {fileID: 1661225102824349598, guid: 454b98fb0934a564b812ecb2d5c0ada1, type: 3}
       propertyPath: m_Name
       value: Game UI
@@ -796,6 +841,10 @@ PrefabInstance:
     - target: {fileID: 1935111669973388382, guid: 056ec538994fdb243af57cd3b87d8b36, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1935111669973388383, guid: 056ec538994fdb243af57cd3b87d8b36, type: 3}
+      propertyPath: isManualControl
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3611036600545895855, guid: 056ec538994fdb243af57cd3b87d8b36, type: 3}
       propertyPath: buttonSound

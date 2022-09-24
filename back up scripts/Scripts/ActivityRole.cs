@@ -13,7 +13,7 @@ public class ActivityRole
     private bool isInGame = false;
     private TextMeshProUGUI narrativeText;
     private int score, initialScore;
-    private float carbonEmission = 0.0f;
+    private float carbonEmission;
     private Dictionary<string, int> activityCounts = new Dictionary<string, int>();
 
     //getters & setters
@@ -77,6 +77,6 @@ public class ActivityRole
         FirstPriorityList.Clear();
         SecondPriorityList.Clear();
         IsInGame = false;
-        CarbonEmission = 0.0f;
+        CarbonEmission = 0;
     }
 }

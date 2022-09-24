@@ -8,12 +8,14 @@ public class GameStateIdle : GameStateBase
     public override void EnterState(GameManager manager){}
     public override void Update(GameManager manager){
         
-        // if (Input.GetKeyDown(KeyCode.O)) {
-        //     manager.ChangeState(manager.stateIntro);
-        // }
-
-        if (SceneManager.GetActiveScene().name.Equals("scene2"))
-            manager.ChangeState(manager.stateIntro);
+        if (manager.isManualControl) {
+            if (Input.GetKeyDown(KeyCode.O)) {
+                manager.ChangeState(manager.stateIntro);
+            }
+        } else {
+            if (SceneManager.GetActiveScene().name.Equals("scene2"))
+                manager.ChangeState(manager.stateIntro);
+        }
     }
     public override void LeaveState(GameManager manager){}
 }

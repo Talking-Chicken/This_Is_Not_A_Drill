@@ -9,7 +9,7 @@ public class UIControl : MonoBehaviour
     private GameManager gameManager;
     [SerializeField] private TextMeshProUGUI yearText, workingText, middleText, upperText, companyText, policymakerText, monthText;
     [SerializeField] private Color workingColor, middleColor, upperColor, companyColor, policymakerColor;
-    [SerializeField] RectTransform descriptions, workingBG, middleBG, upperBG, companyBG, policyBG;
+    [SerializeField] RectTransform descriptions;
     private List<TextMeshProUGUI> textGroup;
 
     //months
@@ -27,11 +27,9 @@ public class UIControl : MonoBehaviour
     public TextMeshProUGUI CompanyText{get=>companyText;}
     public TextMeshProUGUI PolicymakerText{get=>policymakerText;}
     public RectTransform Descriptions{get=>descriptions;}
-    public int CurrentMonthIndex{get=>currentMonthIndex;set=>currentMonthIndex=value;}
 
     void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
         gameManager = FindObjectOfType<GameManager>();
 
         workingText.color = workingColor;
@@ -78,33 +76,14 @@ public class UIControl : MonoBehaviour
         
         if (monthLoopCountDown < 2)
             StartCoroutine(monthCountDown());
-        else {
+        else
             stopMonthCountDown();
-            gameManager.ChangeState(gameManager.stateReview);
-        }
     }
 
     public void stopMonthCountDown() {
         StopCoroutine(monthCountDown());
         monthText.text = months[0];
         monthLoopCountDown = 0;
-    }
-
-    public void hideGameUI() {
-        Descriptions.gameObject.SetActive(false);
-    }
-
-    public void showGameUI() {
-        Descriptions.gameObject.SetActive(true);
-    }
-
-    public void rebuildUI() {
-        LayoutRebuilder.ForceRebuildLayoutImmediate(workingBG.transform as RectTransform);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(middleBG.transform as RectTransform);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(upperBG.transform as RectTransform);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(companyBG.transform as RectTransform);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(policyBG.transform as RectTransform);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(Descriptions.transform as RectTransform);
     }
 
     // public void randomChangeText() {

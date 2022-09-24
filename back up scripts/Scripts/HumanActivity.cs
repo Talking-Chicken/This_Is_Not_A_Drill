@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-//using NaughtyAttributes;
+using NaughtyAttributes;
 
 [Serializable]
 public class HumanActivity
