@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using NaughtyAttributes;
+//using NaughtyAttributes;
 
 [Serializable]
 public class HumanActivity
@@ -38,7 +38,7 @@ public class HumanActivity
     public string ActivityClass {get=>activityClass;set=>activityClass = value;}
     public string ActivityGroup {get=>activityGroup;set=>activityGroup=value;}
     public int Score {get=>score; set=>score=value;}
-    public float CarbonEmission{get=>carbonEmission;set=>carbonEmission=value;}
+    public int CarbonEmission{get=>carbonEmission;set=>carbonEmission=value;}
 
     public HumanActivity() {
         

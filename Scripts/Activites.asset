@@ -1,0 +1,536 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fd82349592a0a2479919f945279fdd5, type: 3}
+  m_Name: Activites
+  m_EditorClassIdentifier: 
+  Activities:
+  - activityName: Riot
+    startYears: 
+    endYears: 
+    duration: 2
+    activityClass: Working Class
+    activityGroup: none
+    firstNarratives:
+    - Working class starts a riot, largely punished those who did nothing, but also
+      sacrifice time and money of themselves.
+    - '"Riot lasted 3 years now, government forced them to go back to their posistion.'
+    - '"Riot lasted 6 years now, government, again, forced them to go back to their
+      posistion.'
+    - '"Working class keeps ignores government, and the riot finally become a civil
+      war.'
+    secondNarratives:
+    - Because of riot of working class, nuclear plant forced to clsed.
+    - Working class riot strongly impacted your free riding activites.
+    firstConditions:
+    - any
+    - duration%==%2
+    - duration%==%3
+    - duration%>=%4
+    secondConditions:
+    - nuclear%<=%this
+    - Group free%==%this
+    secondAffectingTypes:
+    - Upper Class
+    - not Working Class
+    firstActivityPriorities: 00000000010000000200000003000000
+    secondActivityPriorities: 0500000005000000
+  - activityName: Public transportation
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Working Class
+    activityGroup: transportation
+    firstNarratives:
+    - Instead of commute by cars, working class decides to commute by public transportations.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Local seasonal food
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Working Class
+    activityGroup: transportation
+    firstNarratives:
+    - Working class aims for local and seasonal food to buy, though they can't get
+      everything they want.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Strike
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Working Class
+    activityGroup: none
+    firstNarratives:
+    - Working class is in a strike now
+    secondNarratives:
+    - Because of the strike of working class, company needs more revenue to find
+      working forces
+    firstConditions:
+    - any
+    secondConditions:
+    - Other%==%this
+    secondAffectingTypes:
+    - Company
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 03000000
+  - activityName: Protest
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Working Class
+    activityGroup: none
+    firstNarratives:
+    - Working class is protesting.
+    secondNarratives:
+    - Working class increases your pressure because of their protest.
+    - Working class blames on you and largely increased your pressure by protesting.
+    - '"Working class emphasizes on your extensive electricity usages, decreases
+      your brand impact.'
+    firstConditions:
+    - any
+    secondConditions:
+    - any
+    - any
+    - Not Enough Benefit%==%this
+    secondAffectingTypes:
+    - Middle Class
+    - Upper Class
+    - Company
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 010000000100000001000000
+  - activityName: Meat
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Working Class
+    activityGroup: none
+    firstNarratives:
+    - Working class decides to eat less meat, though vegitables are still expensive.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Oneself
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Working Class
+    activityGroup: free
+    firstNarratives:
+    - Working class falls into self-doubt.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: AC
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Middle Class
+    activityGroup: none
+    firstNarratives:
+    - Middle class starts to decrease usage of AC.
+    - Middle class experienced a lot more heat stroke due to climate change and short
+      on AC.
+    secondNarratives: []
+    firstConditions:
+    - any
+    - duration%==%2
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 0000000001000000
+    secondActivityPriorities: 
+  - activityName: Public transportation
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Middle Class
+    activityGroup: transportation
+    firstNarratives:
+    - Instead of commute by cars, middle class decides to commute by public transportations.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Meat
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Middle Class
+    activityGroup: none
+    firstNarratives:
+    - Middle class decides to eat less meat, though vegitables are still expensive.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Building
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Middle Class
+    activityGroup: none
+    firstNarratives:
+    - Middle class changes their house, though that means further away from work
+      or higher living fee.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Climate injustice
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Middle Class
+    activityGroup: none
+    firstNarratives:
+    - Middle class emphasizes on climate injustice.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Local seasonal food
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Middle Class
+    activityGroup: tranportation
+    firstNarratives:
+    - Middle class aims for local and seasonal food to buy, though they can't get
+      everything they want.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Not enough power
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Middle Class
+    activityGroup: free
+    firstNarratives:
+    - Middle class gives up on making a change
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Fly
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Upper Class
+    activityGroup: none
+    firstNarratives:
+    - Upper class tries to fly less, though they need more time on commuting.
+    secondNarratives:
+    - Upper class divest those non-environmental friendly industries, though they
+      lose a lot of potential money making opportunities.
+    firstConditions:
+    - any
+    secondConditions:
+    - any
+    secondAffectingTypes:
+    - Upper Class
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 00000000
+  - activityName: Electric Car
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Upper Class
+    activityGroup: none
+    firstNarratives:
+    - Upper class changes their car to electric one, though the process of generating
+      electricity might not be green.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Local seasonal food
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Upper Class
+    activityGroup: transportation
+    firstNarratives:
+    - Upper class aims for local and seasonal food to buy, though they need to change
+      their diet a lot.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Public transportation
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Upper Class
+    activityGroup: transportation
+    firstNarratives:
+    - Instead of commute by cars, upper class decides to commute by public transportations.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: others do it
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Upper Class
+    activityGroup: free
+    firstNarratives:
+    - Upper class thinks that other people should make the change first, to avoid
+      risks.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Advertise
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Upper Class
+    activityGroup: none
+    firstNarratives:
+    - Upper class advertises self, though only they know themselves are the real
+      role model or not.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Change plastic package
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Company
+    activityGroup: none
+    firstNarratives:
+    - Company replaces their piastic packages. Will customers pay for this expense
+      or the company?
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: APSS
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Company
+    activityGroup: none
+    firstNarratives:
+    - Company starts to develop this system, costing money and time.
+    - '"Company finished the development of system, increased the efficiency a lot!'
+    secondNarratives:
+    - D has reached a bottleneck.
+    firstConditions:
+    - any
+    - duration%==2%
+    secondConditions:
+    - duration%>=3%
+    secondAffectingTypes:
+    - Company
+    firstActivityPriorities: 0000000001000000
+    secondActivityPriorities: 02000000
+  - activityName: Nuclear
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Company
+    activityGroup: none
+    firstNarratives:
+    - Company decides to use nuclear power, fairly envitomental friendly but dangerous
+      as well.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Renewable energy
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Company
+    activityGroup: 
+    firstNarratives:
+    - Company changes their energy souce to renwable one, though place to generate
+      and store them is still a problem.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Product lives
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Company
+    activityGroup: none
+    firstNarratives:
+    - Company lengthens their product lives, as demands goes down, profit goes down
+      as well.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Reduce energy use
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Company
+    activityGroup: none
+    firstNarratives:
+    - 'Company starts to saves energy from workplace, though workers might endure
+      worse working condition. '
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Not enough benefit
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Company
+    activityGroup: free
+    firstNarratives:
+    - Making profit is the core value of a company, so ignore those unbeneficial
+      events.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Ban Ads
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Policymaker
+    activityGroup: none
+    firstNarratives:
+    - New policy bans non-environmental friendly ads from stations.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Control fossil fuel
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Policymaker
+    activityGroup: none
+    firstNarratives:
+    - Policy decreases the usgae of fossil fuel but also increases cost of battery
+      and renewable energy.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Single-use plastic
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Policymaker
+    activityGroup: none
+    firstNarratives:
+    - Policy trying to cut single-use plastic to zero, though cost of those products
+      will go up.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 
+  - activityName: Education
+    startYears: 
+    endYears: 
+    duration: 0
+    activityClass: Policymaker
+    activityGroup: none
+    firstNarratives:
+    - Policy pushes environmental education in public schools. It's a long term plan.
+    secondNarratives: []
+    firstConditions:
+    - any
+    secondConditions: []
+    secondAffectingTypes: []
+    firstActivityPriorities: 00000000
+    secondActivityPriorities: 

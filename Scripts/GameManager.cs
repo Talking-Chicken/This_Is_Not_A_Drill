@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NaughtyAttributes;
+//using NaughtyAttributes;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -70,6 +70,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(this.gameObject);
+
         CurrentYear = startYear;
         deltaYearTime = totalDuration/Mathf.Abs(endYear-startYear);
         List<List<string>> cards = ParseCSVIntoCards(cardFile.text);
@@ -106,11 +108,11 @@ public class GameManager : MonoBehaviour
         }
 
         //test
-        addToActiveCards("ban ads");
-        addToActiveCards("electric car");
-        addToActiveCards("riot");
-        addToActiveCards("building");
-        addToActiveCards("nuclear");
+        // addToActiveCards("ban ads");
+        // addToActiveCards("electric car");
+        // addToActiveCards("riot");
+        // addToActiveCards("building");
+        // addToActiveCards("nuclear");
         
         foreach (ActivityRole role in Roles)
             role.IsInGame = true;
@@ -206,9 +208,6 @@ public class GameManager : MonoBehaviour
 
                     //assign display name
                     humanActivity.DisplayName = nameSection[2];
-
-                    //assign carbon emission
-                    humanActivity.CarbonEmission = float.Parse(nameSection[3]);
 
                     //deal with first narratives
                     string[] firstNarrativeGroup = targets[1].Split(System.Environment.NewLine.ToCharArray());
@@ -564,16 +563,6 @@ public class GameManager : MonoBehaviour
                             }
                         }
                     }
-
-                    //add carbon emission value to the role
-                    role.CarbonEmission += role.Activity.CarbonEmission;
-
-                    //record the activity count
-                    if (role.ActivityCounts.ContainsKey(role.Activity.ActivityName.Trim().ToLower()))
-                        role.ActivityCounts[role.Activity.ActivityName.Trim().ToLower()] += 1;
-                    else
-                        role.ActivityCounts.Add(role.Activity.ActivityName.Trim().ToLower(), 1);
-
                     //display narratives on UI
                     role.NarrativeText.text = role.FirstNarrative + " " + role.SecondNarrative + " - " + role.ScoreName + ": " + role.Score;
                 } else { //if there's no card input for this role this round
@@ -603,6 +592,7 @@ public class GameManager : MonoBehaviour
             role.NarrativeText.text = role.ActivityClass + " - " + role.ScoreName + ": " + role.Score;
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+        UiControl.rebuildUI();
     }
 
     /* change role's narrative text into the activity display name*/
@@ -617,6 +607,7 @@ public class GameManager : MonoBehaviour
             }
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+        UiControl.rebuildUI();
     }
 
     public IEnumerator waitToChangeState(float waitTime, GameStateBase changingState) {
@@ -626,14 +617,13 @@ public class GameManager : MonoBehaviour
 
     public void rebuildUI() {
         LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+        UiControl.rebuildUI();
     }
 
     public void reset() {
         IsFirstRound = true;
         CurrentYear = startYear;
         ActiveCards.Clear();
-        foreach(ActivityRole role in Roles) {
-            role.reset();
-        }
+        UiControl.hideGameUI();
     }
 }

@@ -12,9 +12,7 @@ public class ActivityRole
     private HumanActivity activity;
     private bool isInGame = false;
     private TextMeshProUGUI narrativeText;
-    private int score, initialScore;
-    private float carbonEmission;
-    private Dictionary<string, int> activityCounts = new Dictionary<string, int>();
+    private int score, initialScore, carbonEmission = 0;
 
     //getters & setters
     public string ActivityClass{get=>activityClass;set=>activityClass=value;}
@@ -32,8 +30,7 @@ public class ActivityRole
     public int Score{get=>score;set=>score=value;}
     public int InitialScore{get=>initialScore;set=>initialScore=value;}
     public string ScoreName{get=>scoreName;set=>scoreName=value;}
-    public float CarbonEmission{get=>carbonEmission;set=>carbonEmission=value;}
-    public Dictionary<string, int> ActivityCounts{get=>activityCounts;set=>activityCounts=value;}
+    public int CarbonEmission{get=>carbonEmission;set=>carbonEmission=value;}
     
     public ActivityRole(string className) {
         ActivityClass = className;
@@ -77,6 +74,5 @@ public class ActivityRole
         FirstPriorityList.Clear();
         SecondPriorityList.Clear();
         IsInGame = false;
-        CarbonEmission = 0;
     }
 }

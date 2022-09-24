@@ -1,109 +1,109 @@
 ^Working Class,,,,
-@Riot,none,Riot on non-environmentally friendly events,,
+@Riot,none,Riot on non-environmentally friendly events,2.5,
 "&Working class citizens started a riot to expose and punish bystanders, but sacrificed their time and money while doing so.*",0,any,Working Class,-3
 "The riot has lasted for 3 years now, and the government has forced participants to disband and go back to their normal lives.*",1,duration%==%0,Working Class,-6
 "The riot has lasted for 6 years now, and the government has forced participants to disband and go back to their normal lives once again.*",2,duration%==%3,Working Class,-6
 "Working class citizens ignored the government, and the riot has become a civil war.*",3,duration%>=%4,Working Class,-12
 "&Because of the riot started by the working class, a nuclear plant was forced to shut down.*",6,nuclear%<=%Riot,Company,-5
 The working class's riot has strongly impacted your free riding activites.*,5,any,Working Class,0
-@Working Class Public transportation,transportation,Take public transportation,,
+@Working Class Public transportation,transportation,Take public transportation,3.1,
 "&Instead of commute by cars, working class citizens decided to commute via public transportation.*",0,any,Working Class,0
 Old and management lacking public transportation system didn't grant you pleasant experiences.*,1,duration%>=%2,Working Class,-1
 "&With working class join the public tranportation group, people feel crowded in the vehicle, reduced their living quality.*",0,Middle Class Public transportation%==%Working Class Public transportation,Middle Class,-1
 "With working class join the public tranportation group, people feel crowded in the vehicle, reduced their living quality.*",0,Upper Class Public transportation%==%Working Class Public transportation,Upper Class,-1
-@Working Class Local seasonal food,transportation,"Buy local, seasonal food",,
+@Working Class Local seasonal food,transportation,Buy local and seasonal food,1.24,
 "&Working class citizens make an effort to buy local and seasonal food; however, financial restrictions limit their choices.*",0,any,Working Class,-1
 "Eating only local and seasonal food for a while, you missed the taste of other variety of food choices.*",1,duration%>=1,Working Class,-2
-@Working Class Building,none,Move to on-site renewable powered buildings,,
+@Working Class Building,none,Move to on-site renewable powered buildings,1.14,
 "&Working class citizens relocated to on-site renewable powered buildings; however, their commute to work was longer and living fees were higher.*",0,any,Working Class,-2
-@Protest,none,Protest againt climate injustice,,
+@Protest,none,Protest againt climate injustice,1,
 &Working class citizens decided to protest for climate justice.*,0,any,Working Class,0
 &The working class increased your pressure to take action by protesting against you.*,1,Other%==%Protest,Middle Class,-1
 The working class blamed you for environmental destruction and asked you to take immediate action in their protest against you.* ,1,Other%==%Protest,Upper Class,-2
 "The working class exposed your excessive consumption of electricity, decreasing your brand image and impact.*",1,Not Enough Benefit%==%Protest,Company,-3
-@Working Class Meat,none,Reduce meat consumption,,
+@Working Class Meat,none,Reduce meat consumption,0.95,
 "&Working class citizens decided to eat less meat - though, vegetables are still expensive.*",0,any,Working Class,0
 "It has been a long time of eating less meat, do you feel healthier?*",1,duration%>=%2,Working Class,0
-@Oneself,free,Do nothing. You don't have enough power to make a change.,,
+@Oneself,free,Do nothing. You don't have enough power to make a change.,0,
 &The working class fell into self-doubt.*,0,any,Working Class,0
 ^Middle Class,,,,
-@AC,none,Decrease AC usage,,
+@AC,none,Decrease AC usage,0.42,
 &Middle class citizens began to reduce their AC usage.*,0,any,Middle Class,-1
 Middle class citizens experienced heat strokes due to hot summers and shortage of UC usage.*,1,duration%==%1,Middle Class,-2
 "As temperature raises worldwide, living quality without AC decreases further.*",2,duration%>=%2,Middle Class,-3
-@Middle Class Public transportation,transportation,Take public transportation,,
+@Middle Class Public transportation,transportation,Take public transportation,5,
 "&Instead of using cars, the middle class decided to commute via public transportation.*",0,any,Middle Class,-1
 "&With middle class join the public tranportation group, people feel crowded in the vehicle, reduced their living quality.*",0,Working Class Public transportation%==%Middle Class Public transportation,Working Class,-1
 "With middle class join the public tranportation group, people feel crowded in the vehicle, reduced their living quality.*",0,Upper Class Public transportation%==%Middle Class Public transportation,Upper Class,-1
-@Middle Class Meat,none,Reduce meat consumption,,
+@Middle Class Meat,none,Reduce meat consumption,1.2,
 "&Middle class citizens decided to eat less meat - though, vegetables are still expensive.*",0,any,Middle Class,0
-@Building,none,Move to on-site renewable powered buildings,,
+@Building,none,Move to on-site renewable powered buildings,1.8,
 "&Middle class citizens relocated to on-site renewable powered buildings; however, their commute to work was longer and living fees were higher.*",0,any,Middle Class,-1
 "After moving into new building, rent further squeezed living expanse.*",1,duration%>=%1,Middle Class,-2
-@Climate injustice,none,Emphasizing climate injustice,,
+@Climate injustice,none,Emphasizing climate injustice,1,
 "&Middle class citizens decided to address climate injustice, standing up for those impacted the most.*",0,any,Middle Class,0
 "&Because of middle class' protest, your reputation goes down a lot.*",3,Other%==%Climate injustice,Upper Class,-2
 "Because of middle class' protest, people asking you to do somthing about climate injustice.*",3,Other%==%Climate injustice,Policymaker,-3
-@Middle Class Local seasonal food,tranportation,"Buy local, seasonal food",,
+@Middle Class Local seasonal food,tranportation,Buy local and seasonal food,2,
 "&Middle class citizens make an effort to buy local and seasonal food; however, financial restrictions limit their choices.*",0,any,Middle Class,-1
-@Not enough power,free,Do nothing. You don't have enough power to make a change.,,
+@Not enough power,free,Do nothing. You don't have enough power to make a change.,0,
 &The middle class gave up on trying to make a change.*,0,any,Middle Class,0
 ^Upper Class,,,,
-@Fly,none,Travel less (by aviation),,
+@Fly,none,Travel less (by aviation),7.5,
 "&Upper class citizens try to fly less, but their occupations and travel plans were impacted.*",0,any,Upper Class,-2
 "Upper class continuting fly less, vacations and free time are shortened.*",1,duration%>=%1,Upper Class,-3
-@Divest,none,Divest in non-environmentally conscious businesses ,,
+@Divest,none,Divest in non-environmentally conscious businesses ,2.5,
 "&Upper class citizens divested in non-environmentally friendly industries, but they lost potential money-making opportunities.*",0,any,Upper Class,-2
 "&As upper class divesting, industries pay less wages to working class.*",3,Other%==%Divest,Working Class,-1
 "As upper class divesting, industries pay less wages to middle class.*",3,Other%==%Divest,Middle Class,-1
 "As upper class divesting, industries that are been divested are bribing and forcing policy makers to make some change.*",2,Other%==%Divest,Policymaker,-1
-@Electric Car,none,Purchase/drive an electric car,,
+@Electric Car,none,Purchase/drive an electric car,1.8,
 "&Upper class citizens swapped their gas cars to electric ones; however, the process of mining lithium for these cars was harmful for the environment.*",0,any,Upper Class,0
 "&Upper class's demands for electric cars increase the demand of energy, on-site energy building become more valuable.*",1,Building%==%Electric Car,Middle Class,1
 "Upper class's demands for electric cars increase the demand of energy, developing renewable energy become more valuable.*",1,Renewable energy%==%Electric Car,Company,1
 "Upper class's demands for electric cars increase the demand of energy, utility charge increases.*",1,Other%==%Electric Car,Working Class,-1
 "Upper class's demands for electric cars increase the demand of energy, utility charge increases.*",1,Other%==%Electric Car,Middle Class,-1
-@Upper Class Local seasonal food,transportation,"Buy local, seasonal food",,
-"&Upper class citizens made an effort to buy local and seasonal food, with the cost of needing to adapt their diet slightly.*",0,any,Upper Class,-1
-@Upper Class Public transportation,transportation,Take public transportation,,
+@Upper Class Public transportation,transportation,Take public transportation,5,
 "&Instead of using cars, upper class citizens decided to commute via public transportations.*",0,any,Upper Class,-1
-@others do it,free,Push climate responsibility to others. They can take action first.,,
+@Upper Class Local seasonal food,transportation,Buy local and seasonal food,0.76,
+"&Upper class citizens made an effort to buy local and seasonal food, with the cost of needing to adapt their diet slightly.*",0,any,Upper Class,-1
+@others do it,free,Push climate responsibility to others. They can take action first.,0,
 &Upper class citizens put the responsibility to make a change on other people to avoid their own personal risks.*,0,any,Upper Class,0
-@Advertise,none,Advertise self for having green life,,
+@Advertise,none,Advertise self for having green life,0,
 "&Upper class citizens were only superficially ""green"", and no one knew they were being ingenuine.*",0,any,Upper Class,2
 &Having a role model from upper class influenced green education.*,1,Education%>=%Advertise,Policymaker,2
 ^Company,,,,
-@Change plastic package,none,Switch plastic use to a more sustainable material,,
+@Change plastic package,none,Switch plastic use to a more sustainable material,1,
 &Companies replaced plastic packages to more eco-friendly ones. Will this expense be paid by the consumers or the companies themselves?*,0,any,Company,0
-@APSS,none,Advance production scheduling system for optimal efficiency,,
+@APSS,none,Advance production scheduling system for optimal efficiency,2.5,
 "&Companies have started to develop a more efficient production scheduling system, costing money and time.*",0,any,Company,-2
 "Companies have finished the development of the system, increasing efficiency by a ton!*",1,duration%==%2,Company,4
 The increase of efficiency slowed down because R&D reached a bottleneck.*,2,duration%>=%3,Company,-1
 "&Companies enhanced their production system, now they need less workers from working class.*",2,Other%==%APSS,Working Class,-1
-@Nuclear,none,Consider nuclear power,,
+@Nuclear,none,Consider nuclear power,6,
 &Companies decided to use nuclear power - fairly environmentally friendly and rich in energy but dangerous as well.*,0,any,Company,2
 "&Developing renewable energy and nuclear energy, companies soon become rich in energy.*",2,Renewable energy%<=%Nuclear,Company,2
-@Renewable energy,,Develop/Use renewable energy,,
+@Renewable energy,,Develop/Use renewable energy,5,
 "&Companies changed their energy source to a renewable one; however, issues of generation and storage rose as a result.*",0,any,Company,1
 "&Developing renewable energy and nuclear energy, companies soon become rich in energy.*",2,Nuclear%<=%Renewable energy,Company,2
-@Product lives,none,Increases product lives,,
+@Product lives,none,Increases product lives,1,
 "&Companies lengthened their product lives, but as demand went down, profit also went down.*",0,any,Company,-2
 "Having financial report that shows the decrease on profit, shareholders asking you to do something about it.*",1,duration%>=%1,Company,-2
-@Reduce energy use,none,Reduce factory and office energy use,,
+@Reduce energy use,none,Reduce factory and office energy use,4.5,
 "&Companies began to save energy in the workplace, but as a result, workers had to endure lower quality working conditions. *",0,any,Company,1
 "&Companies tries to control energy use in work space, your comfort level during work is deducted.*",1,Other%==%Reduce energy use,Working Class,-1
 "Companies tries to control energy use in work space, your comfort level during work is deducted.*",1,Other%==%Reduce energy use,Middle Class,-1
 "Workers are unhappy about companies' reduce of energy use in working space, they are asking for a more comfortable working experience.*",2,Other%==%Reduce energy use,Policymaker,-1
 Workers supported your idea of not letting companies to reduce their working comforts.*,3,Don't change a lot%==%Reduce energy use,Policymaker,2
-@Not enough benefit,free,The costs outweigh the benefits. Prioritize profit rather than climate-related issues,,
+@Not enough benefit,free,The costs outweigh the benefits. Prioritize profit rather than climate-related issues,0,
 "&Making profit was the core value of the companies, so climate-related issues were not a priority.*",0,any,Company,0
 ^Policymaker,,,,
-@Ban Ads,none,Ban non-environmentally friendly ads ,,
+@Ban Ads,none,Ban non-environmentally friendly ads ,0.25,
 "&A new policy banned non-environmentally friendly ads from public stations, those companies are very unhappy about this.*",0,any,Policymaker,-2
 "&New policy banned companies' ads, Reduced your influence in market.*",2,Other%==%Ban Ads,Company,-2
 "Since companies used renewable energy, new policy only banned ads that are non-environmental friendly.*",3,Renewable energy%<=%Ban Ads,Company,0
 New policy of ban ads didn't affect companies tho are using nuclear energy.*,3,Nuclear%<=%Ban Ads,Company,0
-@Control fossil fuel,none,Control fossil fuel electricity use,,
+@Control fossil fuel,none,Control fossil fuel electricity use,5,
 "&A new policy decreased fossil fuel energy consumption, but also increased costs of batteries for renewable energy storage.*",0,any,Policymaker,0
 "&Fossil fuel energy is been controled by new policy, which means working class needs pay more electricity fees.*",0,Other%==%Control fossil fuel,Working Class,-1
 "Fossil fuel energy is been controled by new policy, which means middle class needs pay more electricity fees.*",0,Other%==%Control fossil fuel,Middle Class,-1
@@ -111,14 +111,14 @@ New policy of ban ads didn't affect companies tho are using nuclear energy.*,3,N
 "Fossil fuel energy is been controled by new policy, which means industry electricity fee raises in price.*",0,Other%==%Control fossil fuel,Company,-1
 "Fossil fuel energy is been controled by new policy, but companies didn't affected by that, because of their nuclear power.*",2,Nuclear%<=%Control fossil fuel,Company,0
 "Fossil fuel energy is been controled by new policy, but companies didn't affected by that, because of their development in renewable energy.*",1,Renewable energy%<=%Control fossil fuel,Company,0
-@Single-use plastic,none,Decrease reliability of fossil fuels for energy production,,
+@Single-use plastic,none,Decrease reliability of fossil fuels for energy production,4,
 "&A new policy tried to eliminate single-use plastics completely; however, costs of other packaging resources increased.*",0,any,Policymaker,0
 &Policy of reducing single-use plastics Imperceptibly increase daily living expanse.*,1,Other% ==%Single-use plastic,Working Class,-1
 Policy of reducing single-use plastics Imperceptibly increase daily living expanse.*,1,Other% ==%Single-use plastic,Middle Class,-1
 Policy of reducing single-use platstics asks companies to change their packages to more expansive materials.*,2,Other%==%Single-use plastic,Company,-1
-@Education,none,Implement climate change education in the New York education system,,
+@Education,none,Implement climate change education in the New York education system,1.5,
 &A new policy pushed for environmental education in public schools - as a long term plan.*,0,any,Policymaker,0
-@Reduce new road,none,Reduce building new roads,,
+@Reduce new road,none,Reduce building new roads,8,
 "&A new policy slowed down speed of constructing new roads and infrastructure, but also slowed down economic growth.*",0,any,Policymaker,0
 "&Because of reducing new road policy and your decision of flying less, upper class takes way more time on road.*",2,Fly%<=%Reduce new road,Upper Class,-2
 "Because of reducing new road policy, intercity food transportation becomes harder. Fortunately, working class decided to eat more local foods.*",2,Working Class Local seasonal food%<=%Reduce new road,Working Class,0
@@ -127,7 +127,7 @@ Policy of reducing single-use platstics asks companies to change their packages 
 "Because of reducing new road policy, transportation relies more on public ones. Fortunately, working class has already doing so.*",1,Working Class Public transportation%<=%Reduce new road,Working Class,0
 "Because of reducing new road policy, transportation relies more on public ones. Fortunately, middle class has already doing so.*",1,Middle Class Public transportation%<=%Reduce new road,Middle Class,0
 "Because of reducing new road policy, transportation relies more on public ones. Fortunately, upper class has already doing so.*",1,Upper Class Public transportation%<=%Reduce new road,Upper Class,0
-@Don't change a lot,none,Don't make captain's call,,
+@Don't change a lot,none,Don't make captain's call,0,
 "&Policy suggesting people to not chnage a lot, since captain's call cannot change anything.*",0,any,Policymaker,0
-@Defend,free,"Don't combat climate change directly. Instead, focus on defence strategies to protect citizens.",,
+@Defend,free,Don't combat climate change directly. Instead focus on defence strategies to protect citizens.,0,
 "&There's not much policy-makers can do to combat climate change directly, so new policies focused on defence strategies from climate disasters.*",0,any,Policymaker,0
