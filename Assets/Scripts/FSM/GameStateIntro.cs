@@ -14,7 +14,7 @@ public class GameStateIntro : GameStateBase
         }
 
         if (manager.isManualControl)
-            manager.StartCoroutine(manager.waitToChangeState(5, manager.statePlay));
+            manager.StartCoroutine(manager.waitToChangeState(2, manager.statePlay));
     }
 
     public override void Update(GameManager manager){
@@ -26,6 +26,5 @@ public class GameStateIntro : GameStateBase
     }
 
     public override void LeaveState(GameManager manager){
-        manager.UiControl.showGameUI();
     }
 }

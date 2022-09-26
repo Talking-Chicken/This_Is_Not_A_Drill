@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public bool isManualControl = false;
     private int currentYear;
-    private float currentTime, deltaYearTime;
+    private float currentTime = 0.0f;
     [SerializeField] private int startYear, endYear;
     [SerializeField] private float totalDuration; //time in seconds
     private List<HumanActivity> activatingActivities = new List<HumanActivity>(), //only one per role will be at this list
@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextAsset cardFile;
     [SerializeField] private List<HumanActivity> activeCards;
     private string recievedCardID = "", pastRecievedCardID = "";
+    private bool isFirstCard = false;
 
     //roles
     private List<ActivityRole> roles = new List<ActivityRole>() {
@@ -70,13 +71,14 @@ public class GameManager : MonoBehaviour
     public bool IsFirstRound{get=>isFirstRound; set=>isFirstRound = value;}
     public UIControl UiControl{get=>uiControl;}
     public string RecievedCardID{get=>recievedCardID;set=>recievedCardID=value;}
+    public bool IsFirstCard{get=>isFirstCard;set=>isFirstCard=value;}
+    public float CurrentTime{get=>currentTime;set=>currentTime=value;}
 
     void Start()
     {
         DontDestroyOnLoad(this.gameObject);
 
         CurrentYear = startYear;
-        deltaYearTime = totalDuration/Mathf.Abs(endYear-startYear);
         List<List<string>> cards = ParseCSVIntoCards(cardFile.text);
         assignCardsToActivities(cards);
         uiControl = FindObjectOfType<UIControl>();
@@ -89,18 +91,23 @@ public class GameManager : MonoBehaviour
             switch(role.ActivityClass.Trim().ToLower()) {
                 case "working class":
                     role.NarrativeText = uiControl.WorkingText;
+                    role.EndNarrativeText = uiControl.WorkingEndText;
                     break;
                 case "middle class":
                     role.NarrativeText = uiControl.MiddleText;
+                    role.EndNarrativeText = uiControl.MiddleEndText;
                     break;
                 case "upper class":
                     role.NarrativeText = uiControl.UpperText;
+                    role.EndNarrativeText = uiControl.UpperEndText;
                     break;
                 case "company":
                     role.NarrativeText = uiControl.CompanyText;
+                    role.EndNarrativeText = uiControl.CompanyEndText;
                     break;
                 case "policymaker":
                     role.NarrativeText = uiControl.PolicymakerText;
+                    role.EndNarrativeText = uiControl.PolicyEndText;
                     break;
                 default:
                     Debug.Log("Can't find " + role.ActivityClass.Trim().ToLower() + " when assigning narrative texts");
@@ -144,21 +151,6 @@ public class GameManager : MonoBehaviour
             roundEnd();
         
         currentState.Update(this);
-    }
-
-    public void nextYear() {
-        currentTime = 0;
-        CurrentYear = Mathf.Min(CurrentYear+1, endYear);
-        //uiControl.randomChangeText();
-    }
-
-    IEnumerator timeCountDown(float waitSecond) {
-        yield return new WaitForSeconds(waitSecond);
-
-        if (currentYear < endYear) {
-            nextYear();
-            StartCoroutine(timeCountDown(waitSecond));
-        }
     }
 
     #region CSV to Scriptable Object
@@ -704,7 +696,7 @@ public class GameManager : MonoBehaviour
                 role.NarrativeText.text = role.ActivityClass + " doesn't involve in this current game. You can use this role in the next game.";
             }
         }
-        LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
+        uiControl.rebuildUI();
     }
 
     /* read card name from Python, and add the card to current playing cards
@@ -723,7 +715,6 @@ public class GameManager : MonoBehaviour
         foreach (ActivityRole role in Roles) {
             role.NarrativeText.text = role.ActivityClass + " - " + role.ScoreName + ": " + role.Score;
         }
-        LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
         UiControl.rebuildUI();
     }
 
@@ -738,7 +729,6 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
         UiControl.rebuildUI();
     }
 
@@ -747,8 +737,18 @@ public class GameManager : MonoBehaviour
         ChangeState(changingState);
     }
 
+    public bool timerCountDown(float endTime) {
+        if (currentTime >= endTime) {
+            currentTime = 0.0f;
+            return true;
+        }
+        else
+            currentTime += Time.deltaTime;
+        
+        return false;
+    }
+
     public void rebuildUI() {
-        LayoutRebuilder.ForceRebuildLayoutImmediate(uiControl.Descriptions.transform as RectTransform);
         UiControl.rebuildUI();
     }
 

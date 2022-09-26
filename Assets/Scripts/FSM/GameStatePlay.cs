@@ -5,7 +5,9 @@ using UnityEngine;
 public class GameStatePlay : GameStateBase
 {
     public override void EnterState(GameManager manager){
+        manager.UiControl.showGameUI();
         //manager.UiControl.StartCoroutine(manager.UiControl.monthCountDown());
+        manager.IsFirstCard = true;
     }
     public override void Update(GameManager manager){
         //recieve cards info and show them on the UI
@@ -20,7 +22,23 @@ public class GameStatePlay : GameStateBase
         if(Input.GetKeyDown(KeyCode.R))
             manager.addToActiveCards("Reduce energy use");
 
-        manager.addToACtiveCardsFromPython();
+        if (manager.IsFirstCard && manager.addToACtiveCardsFromPython()) {
+            manager.UiControl.monthCountDown();
+            manager.IsFirstCard = false;
+        }
+        
+        if (manager.IsFirstCard && Input.GetKeyDown(KeyCode.Q)) {
+            Debug.Log("Coutning down");
+            manager.UiControl.StartCoroutine(manager.UiControl.monthCountDown());
+            manager.IsFirstCard = false;
+        }
+
+        if (!manager.IsFirstCard)
+            if (!manager.timerCountDown(15))
+                if (15-(int)manager.CurrentTime < 10)
+                    manager.UiControl.SecondText.text = "0"+(15-(int)manager.CurrentTime)+"";
+                else
+                    manager.UiControl.SecondText.text = 15-(int)manager.CurrentTime+"";
 
         //if recieved signal that the round has end, change to review state
         if (Input.GetKeyDown(KeyCode.O)) {
@@ -37,6 +55,7 @@ public class GameStatePlay : GameStateBase
             }
         }
 
+        manager.IsFirstCard = false;
         manager.UiControl.stopMonthCountDown();
     }
 }

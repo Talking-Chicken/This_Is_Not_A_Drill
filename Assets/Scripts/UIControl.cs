@@ -7,13 +7,18 @@ using UnityEngine.UI;
 public class UIControl : MonoBehaviour
 {
     private GameManager gameManager;
-    [SerializeField] private TextMeshProUGUI yearText, workingText, middleText, upperText, companyText, policymakerText, monthText;
+    [SerializeField] private TextMeshProUGUI yearText, workingText, middleText, upperText, companyText, policymakerText, monthText, secondText,
+                                             workingEndText, middleEndText, upperEndText, companyEndText, policyEndText, endGameSecondText;
     [SerializeField] private Color workingColor, middleColor, upperColor, companyColor, policymakerColor;
-    [SerializeField] RectTransform descriptions, workingBG, middleBG, upperBG, companyBG, policyBG;
+    [SerializeField] RectTransform descriptions, workingBG, middleBG, upperBG, companyBG, policyBG, leftSection, rightSection, 
+                                   workingContainer, middleContainer, upperContainer, companyContainer, policyContainer, uiContainer, gameEndUiContainer;
     private List<TextMeshProUGUI> textGroup;
 
+    //animations
+    private Animator uiAnimator, endUiAnimator;
+
     //months
-    private string[] months = new string[]{"", "Jan", "Feb", "March", "April", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    private string[] months = new string[]{"", "Janurary", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     [SerializeField] private float playDuration;
     private float currentPlayTime, playdeltaTime;
     private int currentMonthIndex = 0, monthLoopCountDown = 0;
@@ -26,8 +31,15 @@ public class UIControl : MonoBehaviour
     public TextMeshProUGUI UpperText{get=>upperText;}
     public TextMeshProUGUI CompanyText{get=>companyText;}
     public TextMeshProUGUI PolicymakerText{get=>policymakerText;}
+    public TextMeshProUGUI WorkingEndText{get=>workingEndText;}
+    public TextMeshProUGUI MiddleEndText{get=>middleEndText;}
+    public TextMeshProUGUI UpperEndText{get=>upperEndText;}
+    public TextMeshProUGUI CompanyEndText{get=>companyEndText;}
+    public TextMeshProUGUI PolicyEndText{get=>policyEndText;}
     public RectTransform Descriptions{get=>descriptions;}
     public int CurrentMonthIndex{get=>currentMonthIndex;set=>currentMonthIndex=value;}
+    public TextMeshProUGUI SecondText{get=>secondText;set=>secondText=value;}
+    public TextMeshProUGUI EndGameSecondText{get=>endGameSecondText;set=>endGameSecondText=value;}
 
     void Start()
     {
@@ -43,22 +55,19 @@ public class UIControl : MonoBehaviour
         textGroup = new List<TextMeshProUGUI>() {workingText, middleText, upperText, companyText, policymakerText};
 
         playdeltaTime = playDuration / 24;
+
+        uiAnimator = uiContainer.GetComponent<Animator>();
+        endUiAnimator = gameEndUiContainer.GetComponent<Animator>();
     }
 
     void Update()
     {
         if (gameManager != null)
             yearText.text = gameManager.CurrentYear+"";
-        
-        // workingText.text = gameManager.Roles[0].FirstNarrative + " " + gameManager.Roles[0].SecondNarrative;
-        // middleText.text = gameManager.Roles[1].FirstNarrative + " " + gameManager.Roles[1].SecondNarrative;
-        // upperText.text = gameManager.Roles[2].FirstNarrative + " " + gameManager.Roles[2].SecondNarrative;
-        // companyText.text = gameManager.Roles[3].FirstNarrative + " " + gameManager.Roles[3].SecondNarrative;
-        // policymakerText.text = gameManager.Roles[4].FirstNarrative + " " + gameManager.Roles[4].SecondNarrative;
     }
 
     public IEnumerator monthCountDown() {
-        if (monthText.text.Equals("Dec")) {
+        if (monthText.text.Equals("December")) {
             monthLoopCountDown++;
             gameManager.CurrentYear++;
             if (monthLoopCountDown < 2) {
@@ -91,11 +100,32 @@ public class UIControl : MonoBehaviour
     }
 
     public void hideGameUI() {
-        Descriptions.gameObject.SetActive(false);
+        uiContainer.gameObject.SetActive(false);
+        uiAnimator.SetBool("Exit", true);
+        uiAnimator.SetBool("Enter", false);
     }
 
     public void showGameUI() {
-        Descriptions.gameObject.SetActive(true);
+        uiContainer.gameObject.SetActive(true);
+        uiAnimator.SetBool("Enter", true);
+        uiAnimator.SetBool("Exit", false);
+        endUiAnimator.SetBool("Exit", true);
+        endUiAnimator.SetBool("Enter", false);
+    }
+
+    public void showGameEndUI() {
+        gameEndUiContainer.gameObject.SetActive(true);
+        uiAnimator.SetBool("Exit", true);
+        uiAnimator.SetBool("Enter", false);
+        endUiAnimator.SetBool("Enter", true);
+        endUiAnimator.SetBool("Exit", false);
+
+    }
+
+    public void hideGameEndUI() {
+        endUiAnimator.SetBool("Exit", true);
+        endUiAnimator.SetBool("Enter", false);
+        uiAnimator.SetBool("Enter", false);
     }
 
     public void rebuildUI() {
@@ -104,16 +134,25 @@ public class UIControl : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(upperBG.transform as RectTransform);
         LayoutRebuilder.ForceRebuildLayoutImmediate(companyBG.transform as RectTransform);
         LayoutRebuilder.ForceRebuildLayoutImmediate(policyBG.transform as RectTransform);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(Descriptions.transform as RectTransform);
+
+        if (Descriptions != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(Descriptions.transform as RectTransform);
+        if (leftSection != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(leftSection.transform as RectTransform);
+        if (rightSection != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rightSection.transform as RectTransform);
+        if (workingContainer != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(workingContainer.transform as RectTransform);
+        if (middleContainer != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(middleContainer.transform as RectTransform);
+        if (upperContainer != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(upperContainer.transform as RectTransform);
+        if (companyContainer != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(companyContainer.transform as RectTransform);
+        if (policyContainer != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(policyContainer.transform as RectTransform);
+
+        if (gameEndUiContainer != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(gameEndUiContainer.transform as RectTransform);
     }
-
-    // public void randomChangeText() {
-    //     foreach(TextMeshProUGUI text in textGroup)
-    //         text.text = randomText[Random.Range(0, randomText.Length)];
-    //     LayoutRebuilder.ForceRebuildLayoutImmediate(descriptions as RectTransform);
-    //     LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
-    // }
-
-
-
 }

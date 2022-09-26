@@ -11,7 +11,7 @@ public class ActivityRole
                       firstScoreList = new List<int>(), secondScoreList = new List<int>();
     private HumanActivity activity;
     private bool isInGame = false;
-    private TextMeshProUGUI narrativeText;
+    private TextMeshProUGUI narrativeText, endNarrativeText;
     private int score, initialScore;
     private float carbonEmission;
     private Dictionary<string, int> activityCounts = new Dictionary<string, int>();
@@ -29,6 +29,7 @@ public class ActivityRole
     public List<int> FirstScoreList{get=>firstScoreList;set=>firstScoreList=value;}
     public List<int> SecondScoreList{get=>secondScoreList;set=>secondScoreList=value;}
     public TextMeshProUGUI NarrativeText{get=>narrativeText; set=>narrativeText=value;}
+    public TextMeshProUGUI EndNarrativeText{get=>endNarrativeText;set=>endNarrativeText=value;}
     public int Score{get=>score;set=>score=value;}
     public int InitialScore{get=>initialScore;set=>initialScore=value;}
     public string ScoreName{get=>scoreName;set=>scoreName=value;}

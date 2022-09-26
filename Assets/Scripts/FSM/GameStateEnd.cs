@@ -5,7 +5,8 @@ using UnityEngine;
 public class GameStateEnd : GameStateBase
 {
     public override void EnterState(GameManager manager){
-        manager.waitToChangeState(5.0f, manager.stateIdle);
+        //manager.waitToChangeState(5.0f, manager.stateIdle);
+        manager.UiControl.showGameEndUI();
     }
     public override void Update(GameManager manager){
         float totalCarbon = 0.0f;
@@ -18,25 +19,25 @@ public class GameStateEnd : GameStateBase
 
         foreach (ActivityRole role in manager.Roles) {
             if (role.IsInGame) {
-                role.NarrativeText.text = role.ActivityClass + " has prevented " + ((int)((role.CarbonEmission / totalCarbon)* 100)) + "% of carbon emission " +
+                role.EndNarrativeText.text = role.ActivityClass + " has prevented " + ((int)((role.CarbonEmission / totalCarbon)* 100)) + "% of carbon emission " +
                                         "among all " + inGameRoleCount + " roles. However, ";
                 switch (role.ActivityClass.Trim().ToLower()) {
                     case "working class":
                     case "middle class":
                     case "upper class":
-                        role.NarrativeText.text += "living quality ";
+                        role.EndNarrativeText.text += "living quality ";
                         break;
                     case "company":
-                        role.NarrativeText.text += "revenue ";
+                        role.EndNarrativeText.text += "revenue ";
                         break;
                     case "policymaker":
-                        role.NarrativeText.text += "influence ";
+                        role.EndNarrativeText.text += "influence ";
                         break;
                     default:
-                        role.NarrativeText.text = "can't find class " + role.ActivityClass;
+                        role.EndNarrativeText.text = "can't find class " + role.ActivityClass;
                         break;
                 }
-                role.NarrativeText.text += "has changed from " + role.InitialScore + " to " + role.Score;
+                role.EndNarrativeText.text += "has changed from " + role.InitialScore + " to " + role.Score;
 
                 string mostActivity = "";
                 int currentCount = 0;
@@ -48,15 +49,22 @@ public class GameStateEnd : GameStateBase
                 }
 
                 //swtich to each line afterwards
-                role.NarrativeText.text += " . In this game, " + role.ActivityClass + " used " + mostActivity + " the most.";
-                role.NarrativeText.text += getActivityDes(mostActivity);
+                role.EndNarrativeText.text += " . In this game, " + role.ActivityClass + " used " + mostActivity + " the most.";
+                role.EndNarrativeText.text += getActivityDes(mostActivity);
             } else {
-                role.NarrativeText.text = role.ActivityClass + " didn't participate in the game.";
+                role.EndNarrativeText.text = role.ActivityClass + " didn't participate in the game.";
             }   
             manager.rebuildUI();
         }
+
+        if (!manager.timerCountDown(10))
+            manager.UiControl.EndGameSecondText.text = 10-(int)manager.CurrentTime+"";
+        else
+            manager.ChangeState(manager.stateIdle);
     }
-    public override void LeaveState(GameManager manager){}
+    public override void LeaveState(GameManager manager){
+        manager.UiControl.hideGameEndUI();
+    }
 
     //return the description of the most used activity
     private string getActivityDes(string mostActivity) {
@@ -110,6 +118,12 @@ public class GameStateEnd : GameStateBase
                 //upper class
                 case "fly":
                     return "Upper class canceled a bunch of flight during the past 20 years. ";
+                case "divest":
+                    return "Divest";
+                case "electric car":
+                    return "electric car";
+                case "upper class public transportation":
+                    return "";
             }
         }
         return "";

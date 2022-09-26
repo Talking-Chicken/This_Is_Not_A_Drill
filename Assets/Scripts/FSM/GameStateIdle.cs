@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameStateIdle : GameStateBase
 {
     public override void EnterState(GameManager manager){
-        
+        manager.UiControl.hideGameUI();
     }
     public override void Update(GameManager manager){
         
@@ -20,5 +20,6 @@ public class GameStateIdle : GameStateBase
         }
     }
     public override void LeaveState(GameManager manager){
+        
     }
 }
