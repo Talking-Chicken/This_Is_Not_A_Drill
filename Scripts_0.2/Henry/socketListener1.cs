@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class socketListener1 : MonoBehaviour
 {
@@ -21,6 +22,11 @@ public class socketListener1 : MonoBehaviour
     public static readonly int PORT = 1755;
     public static readonly int WAITTIME = 1;
 
+    private bool hasSearchedAnimationChanger = false;
+    private bool hasSearchedScaleChanger = false;
+    
+    private GameManager gameManager;
+
 
     socketListener1()
     {
@@ -31,15 +37,30 @@ public class socketListener1 : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
+        DontDestroyOnLoad(this.gameObject);
         animator = GetComponent<Animator>();
         //objectRenderer = GetComponent<Renderer>();
-        await Task.Run(() => ListenEvents(source.Token));   
+        gameManager = FindObjectOfType<GameManager>();
+        await Task.Run(() => ListenEvents(source.Token)); 
     }
 
     // // Update is called once per frame
     void Update()
     {
         //objectRenderer.material.color = matColor;
+        if (SceneManager.GetActiveScene().name.Equals("scene3")) {
+            if (!hasSearchedAnimationChanger) {
+                animationChanger = FindObjectOfType<animationController2>();
+                hasSearchedAnimationChanger = true;
+            }
+            if (!hasSearchedScaleChanger) {
+                ScaleChanger = FindObjectOfType<ScaleTest1>();
+                hasSearchedScaleChanger = true;
+            }
+        } else {
+            hasSearchedAnimationChanger = false;
+            hasSearchedScaleChanger = false;
+        }
     }
 
     private void ListenEvents(CancellationToken token)
@@ -110,19 +131,31 @@ public class socketListener1 : MonoBehaviour
         }
         else
         {
-            if (state.colorCode.Length > 1)
+            if (state.colorCode.Length >= 1)
             { 
+                Debug.Log("There's something");
                 string contents = state.colorCode.ToString();
+                
                 //print($"Read {contents.Length} bytes from socket.\n Data : {contents}");
                 //print(contents);
-                string[] colors = contents.Split(',')[1].Split('.');
-                string animation = contents.Split(',')[0];
-                //string scale = contents.Split(',')[1];
-                print("Color: " + string.Join(".", colors) + ", animation: " + animation);
-                //print("Color: " + string.Join(".", colors) + ", animation: " + animation + ", scale: " + scale);
-                colorChanger.setColor(colors);
-                //ScaleChanger.setScale(scale);
-                animationChanger.SetAnimation(animation);
+                // string[] colors = contents.Split(',')[1].Split('.');
+                // string animation = contents.Split(',')[0];
+                // string scale = contents.Split(',')[2];
+                // //print("Color: " + string.Join(".", colors) + ", animation: " + animation);
+                // print("Color: " + string.Join(".", colors) + ", animation: " + animation + ", scale: " + scale);
+                // colorChanger.setColor(colors);
+                // ScaleChanger.setScale(scale);
+                //string tmp = "";
+                animationChanger.debugOutput();
+                animationChanger.SetAnimation(contents);
+                Debug.Log("after to set animation");
+                ScaleChanger.setScale(contents);
+                Debug.Log("after to set scale");
+                Debug.Log("content is " + contents);
+                if (gameManager != null)
+                    gameManager.RecievedCardID = contents;
+                else
+                    Debug.Log("Missing Game Manager");
             }
             handler.Close();
         }

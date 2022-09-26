@@ -10,7 +10,8 @@ using UnityEngine;
 public class ScaleTest1 : MonoBehaviour
 {
     //public float scale = .01f;
-    int scaleValue = 0;
+    //int scaleValue = 0;
+    string scaleValue = "";
 
     static Socket listener;
     private CancellationTokenSource source;
@@ -36,25 +37,26 @@ public class ScaleTest1 : MonoBehaviour
         // }
         //bool isSmall = GetBool(transform.localScale);
         
-        if(scaleValue == 1)
+        if(scaleValue.Equals("case1"))
         {
-            transform.localScale = transform.localScale + new Vector3(0, -0.01f,-0.02f);
+            transform.localScale = transform.localScale + new Vector3(0, -0.001f,-0.001f);
         }
-        if(scaleValue == 2){
+        if(scaleValue.Equals("case2")){
             transform.localScale = transform.localScale + new Vector3(-0.01f, -0.01f,0);
         }
-        if(scaleValue == 3){
+        if(scaleValue.Equals("case3")){
             transform.localScale = transform.localScale + new Vector3(-0.004f, -0.01f,0);
         }
-        if(scaleValue == 4){
+        if(scaleValue.Equals("case4")){
             transform.localScale = transform.localScale + new Vector3(-0.004f, -0.005f,0);
         }
-        if(scaleValue == 5){
+        if(scaleValue.Equals("case5")){
             transform.localScale = transform.localScale + new Vector3(-0.004f, -0.008f,0);
         }
     }
-    public void setScale (string scale)
+    public string setScale (string data)
     {
-        scaleValue = int.Parse(scale);
+        scaleValue = data;
+        return data;
     }
 }

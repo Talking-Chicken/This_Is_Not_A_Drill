@@ -5,7 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class GameStateIdle : GameStateBase
 {
-    public override void EnterState(GameManager manager){}
+    public override void EnterState(GameManager manager){
+        
+    }
     public override void Update(GameManager manager){
         
         if (manager.isManualControl) {
@@ -17,5 +19,6 @@ public class GameStateIdle : GameStateBase
                 manager.ChangeState(manager.stateIntro);
         }
     }
-    public override void LeaveState(GameManager manager){}
+    public override void LeaveState(GameManager manager){
+    }
 }

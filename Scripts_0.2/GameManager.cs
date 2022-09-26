@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ActivityData activities;
     [SerializeField] private TextAsset cardFile;
     [SerializeField] private List<HumanActivity> activeCards;
+    private string recievedCardID = "", pastRecievedCardID = "";
 
     //roles
     private List<ActivityRole> roles = new List<ActivityRole>() {
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
     public List<ActivityRole> Roles{get=>roles;private set=>roles=value;}
     public bool IsFirstRound{get=>isFirstRound; set=>isFirstRound = value;}
     public UIControl UiControl{get=>uiControl;}
+    public string RecievedCardID{get=>recievedCardID;set=>recievedCardID=value;}
 
     void Start()
     {
@@ -364,6 +366,27 @@ public class GameManager : MonoBehaviour
                 soundManager.playButtonSound();
                 return addToActiveCards(activity);
             }
+        return false;
+    }
+
+    public bool addToACtiveCardsFromPython() {
+        //Debug.Log("recieved is : " + RecievedCardID + " \npast recieved is " + pastRecievedCardID);
+        if (!RecievedCardID.Equals(pastRecievedCardID)) {
+            Debug.Log("Trying to add cards");
+            switch (RecievedCardID) {
+                case "aa":
+                    addToActiveCards("Riot");
+                    break;
+                case "2":
+                    addToActiveCards("Working Class Public transportation");
+                    break;
+                case "3":
+                    addToActiveCards("Working Class Local seasonal food");
+                    break;
+            }
+            pastRecievedCardID = RecievedCardID;
+            return true;
+        }
         return false;
     }
 

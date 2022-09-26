@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameStatePlay : GameStateBase
 {
     public override void EnterState(GameManager manager){
-        manager.UiControl.StartCoroutine(manager.UiControl.monthCountDown());
+        //manager.UiControl.StartCoroutine(manager.UiControl.monthCountDown());
     }
     public override void Update(GameManager manager){
         //recieve cards info and show them on the UI
@@ -19,6 +19,8 @@ public class GameStatePlay : GameStateBase
             manager.addToActiveCards("APSS");
         if(Input.GetKeyDown(KeyCode.R))
             manager.addToActiveCards("Reduce energy use");
+
+        manager.addToACtiveCardsFromPython();
 
         //if recieved signal that the round has end, change to review state
         if (Input.GetKeyDown(KeyCode.O)) {

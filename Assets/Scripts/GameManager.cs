@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ActivityData activities;
     [SerializeField] private TextAsset cardFile;
     [SerializeField] private List<HumanActivity> activeCards;
+    private string recievedCardID = "", pastRecievedCardID = "";
 
     //roles
     private List<ActivityRole> roles = new List<ActivityRole>() {
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
     public List<ActivityRole> Roles{get=>roles;private set=>roles=value;}
     public bool IsFirstRound{get=>isFirstRound; set=>isFirstRound = value;}
     public UIControl UiControl{get=>uiControl;}
+    public string RecievedCardID{get=>recievedCardID;set=>recievedCardID=value;}
 
     void Start()
     {
@@ -364,6 +366,122 @@ public class GameManager : MonoBehaviour
                 soundManager.playButtonSound();
                 return addToActiveCards(activity);
             }
+        return false;
+    }
+
+    public bool addToACtiveCardsFromPython() {
+        //Debug.Log("recieved is : " + RecievedCardID + " \npast recieved is " + pastRecievedCardID);
+        if (!RecievedCardID.Equals(pastRecievedCardID)) {
+            switch (RecievedCardID) {
+                case "1":
+                    addToActiveCards("Riot");
+                    break;
+                case "2":
+                    addToActiveCards("Working Class Public transportation");
+                    break;
+                case "3":
+                    addToActiveCards("working class local seasonal food");
+                    break;
+                case "4":
+                    addToActiveCards("Working Class Building");
+                    break;
+                case "5":
+                    addToActiveCards("Protest");
+                    break;
+                case "6":
+                    addToActiveCards("working class meat");
+                    break;
+                case "7":
+                    addToActiveCards("oneself");
+                    break;
+                case "8":
+                    addToActiveCards("ac");
+                    break;
+                case "9":
+                    addToActiveCards("middle class public transportation");
+                    break;
+                case "a":
+                    addToActiveCards("middle class meat");
+                    break;
+                case "b":
+                    addToActiveCards("building");
+                    break;
+                case "c":
+                    addToActiveCards("climate injustice");
+                    break;
+                case "d":
+                    addToActiveCards("middle class local seasonal food");
+                    break;
+                case "e":
+                    addToActiveCards("not enough power");
+                    break;
+                case "f":
+                    addToActiveCards("fly");
+                    break;
+                case "g":
+                    addToActiveCards("divest");
+                    break;
+                case "h":
+                    addToActiveCards("electric car");
+                    break;
+                case "i":
+                    addToActiveCards("upper class public transportation");
+                    break;
+                case "j":
+                    addToActiveCards("upper class local seasonal food");
+                    break;
+                case "k":
+                    addToActiveCards("others do it");
+                    break;
+                case "l":
+                    addToActiveCards("advertise");
+                    break;
+                case "m":
+                    addToActiveCards("change plastic package");
+                    break;
+                case "n":
+                    addToActiveCards("apss");
+                    break;
+                case "o":
+                    addToActiveCards("nuclear");
+                    break;
+                case "p":
+                    addToActiveCards("renewable energy");
+                    break;
+                case "q":
+                    addToActiveCards("product lives");
+                    break;
+                case "r":
+                    addToActiveCards("reduce energy use");
+                    break;
+                case "s":
+                    addToActiveCards("not enough benefit");
+                    break;
+                case "t":
+                    addToActiveCards("ban ads");
+                    break;
+                case "u":
+                    addToActiveCards("control fossil fuel");
+                    break;
+                case "v":
+                    addToActiveCards("single-use plastic");
+                    break;
+                case "w":
+                    addToActiveCards("education");
+                    break;
+                case "x":
+                    addToActiveCards("reduce new road");
+                    break;
+                case "y":
+                    addToActiveCards("don't change a lot");
+                    break;
+                case "z":
+                    addToActiveCards("defend");
+                    break;
+            }
+            pastRecievedCardID = RecievedCardID;
+            return true;
+        }
         return false;
     }
 
