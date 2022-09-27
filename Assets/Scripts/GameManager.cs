@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 //using NaughtyAttributes;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour
     public string RecievedCardID{get=>recievedCardID;set=>recievedCardID=value;}
     public bool IsFirstCard{get=>isFirstCard;set=>isFirstCard=value;}
     public float CurrentTime{get=>currentTime;set=>currentTime=value;}
+    public int EndYear{get=>endYear;}
 
     void Start()
     {
@@ -151,6 +153,13 @@ public class GameManager : MonoBehaviour
             roundEnd();
         
         currentState.Update(this);
+        
+        if (RecievedCardID.Equals("start")) {
+            RecievedCardID = "";
+            uiControl.hideGameEndUI();
+            uiControl.hideGameUI();
+            SceneManager.LoadScene(1);
+        }
     }
 
     #region CSV to Scriptable Object
@@ -487,7 +496,7 @@ public class GameManager : MonoBehaviour
         foreach (HumanActivity activity in ActiveCards) {
             if (activity.ActivityClass.Equals(targetingClass)) {
                 targetingActivity = activity;
-                break; 
+                break;
             }
         }
 
@@ -733,19 +742,23 @@ public class GameManager : MonoBehaviour
     }
 
     public IEnumerator waitToChangeState(float waitTime, GameStateBase changingState) {
+        Debug.Log("Starting counting down");
         yield return new WaitForSeconds(waitTime);
         ChangeState(changingState);
     }
 
     public bool timerCountDown(float endTime) {
-        if (currentTime >= endTime) {
-            currentTime = 0.0f;
+        if (CurrentTime >= endTime) {
             return true;
         }
         else
-            currentTime += Time.deltaTime;
+            CurrentTime += Time.deltaTime;
         
         return false;
+    }
+
+    public void resetTimer() {
+        CurrentTime = 0.0f;
     }
 
     public void rebuildUI() {
@@ -760,5 +773,6 @@ public class GameManager : MonoBehaviour
         foreach(ActivityRole role in Roles) {
             role.reset();
         }
+        resetTimer();
     }
 }

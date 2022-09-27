@@ -8,6 +8,9 @@ public class GameStateReview : GameStateBase
         manager.roundEnd();
         manager.UiControl.CurrentMonthIndex = 0;
         manager.UiControl.StopAllCoroutines();
+        manager.StartCoroutine(manager.waitToChangeState(1.5f, manager.statePlay));
+        manager.resetTimer();
+        manager.UiControl.SecondText.text = "00";
     }
     
     public override void Update(GameManager manager){
@@ -18,6 +21,9 @@ public class GameStateReview : GameStateBase
         }
         if (Input.GetKeyDown(KeyCode.P))
             manager.ChangeState(manager.stateEnd);
+        
+        if (int.Parse(manager.UiControl.YearText.text) >= manager.EndYear)
+            manager.StartCoroutine(manager.waitToChangeState(5, manager.stateEnd));
     }
     public override void LeaveState(GameManager manager){
         manager.ActiveCards.Clear();

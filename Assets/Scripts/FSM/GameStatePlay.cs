@@ -23,12 +23,11 @@ public class GameStatePlay : GameStateBase
             manager.addToActiveCards("Reduce energy use");
 
         if (manager.IsFirstCard && manager.addToACtiveCardsFromPython()) {
-            manager.UiControl.monthCountDown();
+            manager.UiControl.StartCoroutine(manager.UiControl.monthCountDown());
             manager.IsFirstCard = false;
         }
         
         if (manager.IsFirstCard && Input.GetKeyDown(KeyCode.Q)) {
-            Debug.Log("Coutning down");
             manager.UiControl.StartCoroutine(manager.UiControl.monthCountDown());
             manager.IsFirstCard = false;
         }
@@ -39,6 +38,9 @@ public class GameStatePlay : GameStateBase
                     manager.UiControl.SecondText.text = "0"+(15-(int)manager.CurrentTime)+"";
                 else
                     manager.UiControl.SecondText.text = 15-(int)manager.CurrentTime+"";
+        
+        if (manager.CurrentTime >= 14.95)
+            manager.UiControl.SecondText.text = "00";
 
         //if recieved signal that the round has end, change to review state
         if (Input.GetKeyDown(KeyCode.O)) {

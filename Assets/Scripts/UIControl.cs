@@ -40,6 +40,7 @@ public class UIControl : MonoBehaviour
     public int CurrentMonthIndex{get=>currentMonthIndex;set=>currentMonthIndex=value;}
     public TextMeshProUGUI SecondText{get=>secondText;set=>secondText=value;}
     public TextMeshProUGUI EndGameSecondText{get=>endGameSecondText;set=>endGameSecondText=value;}
+    public TextMeshProUGUI YearText{get=>yearText;}
 
     void Start()
     {
